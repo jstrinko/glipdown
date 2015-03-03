@@ -24,7 +24,7 @@
 			"url": "https://github.com/jstrinko/glipdown/blob/master/LICENSE-MIT"
 		}
 	],
-	"main": "index.js",
+	"main": "markdown.js",
 	"engines": {
 		"node": ">= 0.8.0"
 	},
