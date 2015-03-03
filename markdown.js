@@ -1,15 +1,10 @@
-/*[SERVER]*/
-var _ = require('underscore');
-var Client;
-/*[/SERVER]*/
+var _ = _ || null;
+if (!(typeof window != 'undefined' && window.document) && !_) {
+	var _ = require('underscore');
+}
 
 var Markdown = function(raw, options) {
 	var options = options || {};
-	/*
-	if (Client && Client.benchmark) {
-		Client.benchmark.aggregate('markdown');
-	}
-	*/
 	if (!raw) {
 		return '';
 	}
@@ -137,11 +132,6 @@ var Markdown = function(raw, options) {
 					(maybe_email2 ? maybe_email2 : '') + 
 					link + "</a>" + last_char;
 		});
-	/*
-	if (Client && Client.benchmark) {
-		Client.benchmark.end('markdown');
-	}
-	*/
 	return val;
 };
 
@@ -195,7 +185,8 @@ var Remove_Markdown = function(raw, options) {
 		});
 };
 
-/*[SERVER]*/
-exports.Markdown = Markdown;
-exports.Remove_Markdown = Remove_Markdown;
-/*[/SERVER]*/
+if (!(typeof window != 'undefined' && window.document)) {
+	exports.Markdown = Markdown;
+	exports.Remove_Markdown = Remove_Markdown;
+	exports.Markdown_For_Search = Markdown_For_Search;
+}

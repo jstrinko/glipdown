@@ -1,0 +1,42 @@
+{
+	"name": "glipdown",
+	"description": "Glip-flavored markdown",
+	"version": "0.0.1",
+	"homepage": "https://github.com/jstrinko/glipdown",
+	"author": {
+		"name": "Jeff Strinko",
+		"email": "jstrinko@gmail.com",
+		"url": "http://github.com/jstrinko"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jstrinko/glipdown.git"
+	},
+	"bugs": {
+		"url": "https://github.com/jstrinko/glipdown/issues"
+	},
+	"files": [
+		"markdown.js"
+	],
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "https://github.com/jstrinko/glipdown/blob/master/LICENSE-MIT"
+		}
+	],
+	"main": "index.js",
+	"engines": {
+		"node": ">= 0.8.0"
+	},
+	"scripts": {
+		"test": "node tests/test.js"
+	},
+	"dependencies": {
+		"underscore": "1.5.x"
+	},
+	"keywords": [
+		"markdown",
+		"glip",
+		"glipdown"
+	]
+}
