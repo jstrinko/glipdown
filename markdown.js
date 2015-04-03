@@ -1,5 +1,5 @@
 var _ = _ || null;
-if (!(typeof window != 'undefined' && window.document) && !_) {
+if ((typeof require != 'undefined') && !_) {
 	var _ = require('underscore');
 }
 
@@ -185,7 +185,7 @@ var Remove_Markdown = function(raw, options) {
 		});
 };
 
-if (!(typeof window != 'undefined' && window.document)) {
+if (typeof exports == 'object') {
 	exports.Markdown = Markdown;
 	exports.Remove_Markdown = Remove_Markdown;
 	exports.Markdown_For_Search = Markdown_For_Search;
