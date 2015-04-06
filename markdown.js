@@ -136,7 +136,7 @@ var Markdown = function(raw, options) {
 };
 
 Markdown.url_regex = /^((ftp|https?):\/\/)?[-\w]+\.([-\w]+\.)*(com|edu|biz|gov|in(?:t|fo)|mil|net|org|name|coop|aero|museum|asia|army|arpa|domains|email|host|wtf|codes|adult|actor|android|audio|beer|bio|uno|business|[a-z][a-z])(:\d+)?($|(\/\S?(\/\S)*\/?)|(\#\S?)|(\?\S?))/i;
-Markdown.global_url_regex = /(([a-zA-Z0-9\!\#\$\%\&\'\*\+\-\/\=\?\%\_\`\{\|\}\~\.]+@)?)(((ftp|https?):\/\/)?[-\w]+\.([-\w]+\.)*(com|edu|biz|gov|in(?:t|fo)|mil|net|org|name|coop|aero|museum|asia|army|arpa|domains|email|host|wtf|codes|adult|actor|android|audio|beer|bio|uno|business|[a-z][a-z])(:\d+)?(((\/([A-Za-z0-9-\._~:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=])*)+)\??([A-Za-z0-9-\._~:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=\%])*)?)([^A-Za-z]|$)/gi; 
+Markdown.global_url_regex = /(([a-zA-Z0-9\!\#\$\%\&\'\*\+\-\/\=\?\%\_\`\{\|\}\~\.]+@)?)(((ftp|https?):\/\/)?[-\w]+\.([-\w]+\.)*(com|edu|biz|gov|in(?:t|fo)|mil|net|org|name|coop|aero|museum|asia|army|arpa|domains|email|host|wtf|codes|adult|actor|android|audio|beer|bio|uno|business|[a-z][a-z]|\d+)(:\d+)?(((\/([A-Za-z0-9-\._~:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=])*)+)\??([A-Za-z0-9-\._~:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=\%])*)?)([^A-Za-z]|$)/gi; 
 
 var Markdown_For_Search = function(raw, options) {
 	options = options || {};
