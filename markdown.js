@@ -76,7 +76,7 @@ var Markdown = function(raw, options) {
 		replace(/\[code_(\w+)\]/g, function(full_match, which) {
 			return "<pre class=codesnippet>" + code_blocks['code_' + which] + "</pre>";
 		}).
-		replace(/\[([^\]]*?)\]\((.*?)\)/g, function(full_match, text, link) {
+		replace(/\[([^\]]*?)\]\(([\s\S]*?)\)/g, function(full_match, text, link) {
 			return "<a href='" + link + "' target='_blank' rel='noreferrer'>" + text + "</a>";
 		}).
 		replace(Markdown.global_url_regex, function(
@@ -101,22 +101,22 @@ var Markdown = function(raw, options) {
 			var sub_bench = +new Date();
 			var start = full_str.substr(last_offset, offset - last_offset);
 			last_offset = offset;
-			if (start.match(/.*\($/)) {
+			if (start.match(/[\s\S]*\($/)) {
 				return full_match;
 			}
-			var inside_tag = was_inside_tag ? (start.match(/.*>[^<]*$/) ? false : true) : start.match(/.*<[^>]*$/);
+			var inside_tag = was_inside_tag ? (start.match(/[\s\S]*>[^<]*$/) ? false : true) : start.match(/[\s\S]*<[^>]*$/);
 			if (inside_tag) {
 				was_inside_tag = true;
 				return full_match;
 			}
 			was_inside_tag = false;
-			var inside_post_tag = start.match(/.*(\{\{-\{\{)(?!.*\}\}-\}\}).*$/);
+			var inside_post_tag = start.match(/[\s\S]*(\{\{-\{\{)(?![\s\S]*\}\}-\}\})[\s\S]*$/);
 			if (inside_post_tag) {
 				return full_match;
 			}
 			var lead_match = full_str.substring(0, offset);
 			var lead_str = lead_match + full_match;
-			var link_matches = lead_str.replace(/\{\{\-\{\{/g, '<').replace(/\}\}-\}\}/g, '>').match(/^.*<a.*?>(.*?)$/);
+			var link_matches = lead_str.replace(/\{\{\-\{\{/g, '<').replace(/\}\}-\}\}/g, '>').match(/^[\s\S]*<a[\s\S]*?>([\s\S]*?)$/);
 			if (link_matches) {
 				var link_match = link_matches[1];
 				if (!link_match.match(/<\/a>/) || link_match.match(/<\/a>$/)) {
@@ -180,7 +180,7 @@ var Remove_Markdown = function(raw, options) {
 		replace(/(^|\n)&gt; ([^\n]*)/g, function(full_match, start, text) {
 			return start + " " + text + " ";
 		}).
-		replace(/\[([^\]]*?)\]\((.*?)\)/g, function(full_match, text, link) {
+		replace(/\[([^\]]*?)\]\(([\s\S]*?)\)/g, function(full_match, text, link) {
 			return text;
 		});
 };
