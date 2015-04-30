@@ -19,63 +19,6 @@ var Markdown = function(raw, options) {
 	var last_offset = 0;
 	var was_inside_tag = false;
 	var val = raw.replace(/\&\#x2F;/g, '/'). // not sure why underscore replaces these...docs don't even claim that it does 
-		replace(/\[code\]([\s\S]*?)(\[\/code\]|$)/gi, function(full_match, text) {
-			var code;
-			try {
-				code = unescape(text);
-			}
-			catch(error) {
-				code = text.replace(/(\%\w\w)/g, function(fm, esc) {
-					return unescape(esc);
-				});
-			}
-			code_blocks['code_' + block_count] = code;
-			var to_return = '[code_' + block_count + ']';
-			block_count++;
-			return to_return;
-		}).
-		replace(/\|([^\n]*)\|(\s|\n|$)/g, function(full_match, text) {
-			var cols = text.split(/\|/);
-			if (!cols.length) {
-				return text;
-			}
-			var percent = (100 / cols.length).toFixed(0);
-			return "<table><tr valign='top'><td width='" + percent + "%'>" +
-					cols.join("</td><td width='" + percent + "%'>") +
-				"</tr></table>";
-		}).
-		replace(/<\/table><table>/, '').
-		replace(/((^|\n)\* [^\*\n]*)+/g, function(full_match, junk, start) {
-			var parts = full_match.split(/\n/);
-			if (parts[0].length === 0) {
-				parts.shift();
-			}
-			return start + "<ul><li>" + 
-				parts.map(function(part) { return part.replace(/^\* /, ''); }).
-					join("</li><li>") + 
-				"</li></ul>";
-		}).
-		replace(/\*\*(\S[^\*\*]*?\S)\*\*/g, function(full_match, text) {
-			return "<b>" + text + "</b>";
-		}).
-		replace(/\*(\S[^\*]*?\S)\*/g, function(full_match, text) {
-			return "<i>" + text + "</i>";
-		}).
-		replace(/__(\S[^__]*?\S)__/g, function(full_match, text) {
-			return "<u>" + text + "</u>";
-		}).
-		replace(/~~(\S[^~~]*?\S)~~/g, function(full_match, text) {
-			return "<strike>" + text + "</strike>";
-		}).
-		replace(/\{\{\[\[-(\S[^\{\{\[\[]*?\S)-\]\]\}\}/g, function(full_match, text) {
-			return "<span class='search_match_stream'>" + text + "</span>";
-		}).
-		replace(/(^|\n)&gt; ([^\n]*)/g, function(full_match, start, text) {
-			return start + "<" + quote_tag + ">" + text + "<" + end_quote_tag + ">";
-		}).
-		replace(/\[code_(\w+)\]/g, function(full_match, which) {
-			return "<pre class=codesnippet>" + code_blocks['code_' + which] + "</pre>";
-		}).
 		replace(/\[([^\]]*?)\]\(([\s\S]*?)\)/g, function(full_match, text, link) {
 			return "<a href='" + link + "' target='_blank' rel='noreferrer'>" + text + "</a>";
 		}).
@@ -131,8 +74,91 @@ var Markdown = function(raw, options) {
 				) + link.replace('&amp;', '&') + "' target='_blank' rel='noreferrer'>" + 
 					(maybe_email2 ? maybe_email2 : '') + 
 					link + "</a>" + last_char;
+		}).
+		replace(/\[code\]([\s\S]*?)(\[\/code\]|$)/gi, function(full_match, text) {
+			var code;
+			try {
+				code = unescape(text);
+			}
+			catch(error) {
+				code = text.replace(/(\%\w\w)/g, function(fm, esc) {
+					return unescape(esc);
+				});
+			}
+			code_blocks['code_' + block_count] = code;
+			var to_return = '[code_' + block_count + ']';
+			block_count++;
+			return to_return;
+		}).
+		replace(/\|([^\n]*)\|(\s|\n|$)/g, function(full_match, text) {
+			var cols = text.split(/\|/);
+			if (!cols.length) {
+				return text;
+			}
+			var percent = (100 / cols.length).toFixed(0);
+			return "<table><tr valign='top'><td width='" + percent + "%'>" +
+					cols.join("</td><td width='" + percent + "%'>") +
+				"</tr></table>";
+		}).
+		replace(/<\/table><table>/, '').
+		replace(/((^|\n)\* [^\*\n]*)+/g, function(full_match, junk, start) {
+			var parts = full_match.split(/\n/);
+			if (parts[0].length === 0) {
+				parts.shift();
+			}
+			return start + "<ul><li>" + 
+				parts.map(function(part) { return part.replace(/^\* /, ''); }).
+					join("</li><li>") + 
+				"</li></ul>";
+		}).
+		replace(/\*\*(\S[^\*\*]*?\S)\*\*/g, function(full_match, text, offset, full_str) {
+			if (Markdown.is_in_url(full_match, text, offset, full_str)) {
+				return full_match;
+			}
+			return "<b>" + text + "</b>";
+		}).
+		replace(/\*(\S[^\*]*?\S)\*/g, function(full_match, text, offset, full_str) {
+			if (Markdown.is_in_url(full_match, text, offset, full_str)) {
+				return full_match;
+			}
+			return "<i>" + text + "</i>";
+		}).
+		replace(/__(\S[^__]*?\S)__/g, function(full_match, text, offset, full_str) {
+			if (Markdown.is_in_url(full_match, text, offset, full_str)) {
+				return full_match;
+			}
+			return "<u>" + text + "</u>";
+		}).
+		replace(/~~(\S[^~~]*?\S)~~/g, function(full_match, text, offset, full_str) {
+			if (Markdown.is_in_url(full_match, text, offset, full_str)) {
+				return full_match;
+			}
+			return "<strike>" + text + "</strike>";
+		}).
+		replace(/\{\{\[\[-([^\{\{\[\[]*?)-\]\]\}\}/g, function(full_match, text, offset, full_str) {
+			return "<span class='search_match_stream'>" + text + "</span>";
+		}).
+		replace(/(^|\n)&gt; ([^\n]*)/g, function(full_match, start, text) {
+			return start + "<" + quote_tag + ">" + text + "<" + end_quote_tag + ">";
+		}).
+		replace(/\[code_(\w+)\]/g, function(full_match, which) {
+			return "<pre class=codesnippet>" + code_blocks['code_' + which] + "</pre>";
 		});
 	return val;
+};
+
+Markdown.is_in_url = function(full_match, text, offset, full_str) {
+	var start = full_str.substr(0, offset);
+	var inside_tag = start.match(/[\s\S]*<[^>]*$/);
+	if (inside_tag) { return true; }
+	var last_str = /([A-Za-z0-9\!\#\$\%\&\'\*\+\-\/\=\?\%\_\`\{\|\}\~\.\:]+)$/g.exec(start);
+	if (last_str) {
+		var potential_url = last_str[0] + text;
+		if (potential_url.match(Markdown.url_regex)) {
+			return true;
+		}
+	}
+	return false;
 };
 
 Markdown.url_regex = /^((ftp|https?):\/\/)?[-\w]+\.([-\w]+\.)*(\d+\.\d+\.\d+|[-A-Za-z]+)(:\d+)?($|(\/\S?(\/\S)*\/?)|(\#\S?)|(\?\S?))/i;
