@@ -20,6 +20,9 @@ var Markdown = function(raw, options) {
 	var was_inside_tag = false;
 	var val = raw.replace(/\&\#x2F;/g, '/'). // not sure why underscore replaces these...docs don't even claim that it does 
 		replace(/\[([^\]]*?)\]\(([\s\S]*?)\)/g, function(full_match, text, link) {
+			if (text === 'code') {
+				return full_match;
+			}
 			return "<a href='" + link + "' target='_blank' rel='noreferrer'>" + text + "</a>";
 		}).
 		replace(Markdown.global_url_regex, function(
