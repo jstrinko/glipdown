@@ -173,7 +173,7 @@ var Markdown_For_Search = function(raw, options) {
 	if (!options.dont_escape) {
 		raw = _.escape(raw);
 	}
-	return raw.replace(/\{\{\[\[-(\S[^\{\{\[\[]*?\S)-\]\]\}\}/g, function(full_match, text) {
+	return raw.replace(/\{\{\[\[-([^\{\{\[\[]*?)-\]\]\}\}/g, function(full_match, text) {
 		return "<span class='search_match_stream'>" + text + "</span>";
 	});
 };
