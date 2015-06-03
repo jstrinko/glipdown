@@ -17,6 +17,8 @@ var Markdown = function(raw, options) {
 	var end_quote_tag = options.use_blockquote ? '/span' : '/q';
 	var bench = +new Date();
 	var last_offset = 0;
+	var test = 0;
+	var total = 0;
 	var was_inside_tag = false;
 	var val = raw.replace(/\&\#x2F;/g, '/'). // not sure why underscore replaces these...docs don't even claim that it does 
 		replace(/\[([^\]]*?)\]\(([\s\S]*?)\)/g, function(full_match, text, link) {
@@ -50,13 +52,13 @@ var Markdown = function(raw, options) {
 			if (start.match(/[\s\S]*\($/)) {
 				return full_match;
 			}
-			var inside_tag = was_inside_tag ? (start.match(/[\s\S]*>[^<]*$/) ? false : true) : start.match(/[\s\S]*<[^>]*$/);
+			var inside_tag = was_inside_tag ? (start.match(/.*>[^<]*$/) ? false : true) : start.match(/.*<[^>]*$/);
 			if (inside_tag) {
 				was_inside_tag = true;
 				return full_match;
 			}
 			was_inside_tag = false;
-			var inside_post_tag = start.match(/[\s\S]*(\{\{-\{\{)(?![\s\S]*\}\}-\}\})[\s\S]*$/);
+			var inside_post_tag = start.match(/.*(\{\{-\{\{)(?![\s\S]*\}\}-\}\})[\s\S]*$/);
 			if (inside_post_tag) {
 				return full_match;
 			}
@@ -115,6 +117,7 @@ var Markdown = function(raw, options) {
 				"</li></ul>";
 		}).
 		replace(/\*\*(\S[^\*\*]*?\S)\*\*/g, function(full_match, text, offset, full_str) {
+			total++;
 			if (Markdown.is_in_url(full_match, text, offset, full_str)) {
 				return full_match;
 			}
@@ -152,7 +155,7 @@ var Markdown = function(raw, options) {
 
 Markdown.is_in_url = function(full_match, text, offset, full_str) {
 	var start = full_str.substr(0, offset);
-	var inside_tag = start.match(/[\s\S]*<[^>]*$/);
+	var inside_tag = start.match(/.*<[^>]*$/);
 	if (inside_tag) { return true; }
 	var last_str = /([A-Za-z0-9\!\#\$\%\&\'\*\+\-\/\=\?\%\_\`\{\|\}\~\.\:]+)$/g.exec(start);
 	if (last_str) {
