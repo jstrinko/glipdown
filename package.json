@@ -29,7 +29,7 @@
 		"node": ">= 0.8.0"
 	},
 	"scripts": {
-		"test": "node tests/test.js"
+		"test": "node test/test.js"
 	},
 	"dependencies": {
 		"underscore": "1.5.x"
