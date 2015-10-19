@@ -1,3 +1,17 @@
+var TLDS = require('./tlds.js');
+
+function loadValidTLDS() {
+	var tldsArray = [];
+
+	TLDS.forEach(function(tld){
+		tldsArray.push('\\.' + tld + '(?!\\w)');
+	});
+
+	return tldsArray.join('|');
+}
+
+var validLinkMarkDownRegEx = new RegExp(loadValidTLDS() + '|^https?:\\/\\/', "i");
+
 var _ = _ || null;
 if ((typeof require != 'undefined') && !_) {
 	var _ = require('underscore');
@@ -25,7 +39,13 @@ var Markdown = function(raw, options) {
 			if (text === 'code') {
 				return full_match;
 			}
+
+			if(!validLinkMarkDownRegEx.test(link)) {
+				return full_match;
+			}
+
 			return "<a href='" + link + "' target='_blank' rel='noreferrer'>" + text + "</a>";
+			
 		}).
 		replace(Markdown.global_url_regex, function(
 			full_match, 
@@ -46,6 +66,10 @@ var Markdown = function(raw, options) {
 			offset,
 			full_str
 	) {
+			if(!validLinkMarkDownRegEx.test(link)) {
+				return full_match;
+			}
+
 			var sub_bench = +new Date();
 			var start = full_str.substr(link_last_offset, offset - link_last_offset);
 			link_last_offset = offset;
