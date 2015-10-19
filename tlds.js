@@ -1,4 +1,4 @@
-var validTLDS = 
+var TLDS = 
 	[
 		'ABB',
 		'ABBOTT',
@@ -1048,4 +1048,4 @@ var validTLDS =
 		'ZW'
 	];
 
-module.exports = validTLDS;
+module.exports = TLDS;
