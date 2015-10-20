@@ -1,7 +1,7 @@
 {
 	"name": "glipdown",
 	"description": "Glip-flavored markdown",
-	"version": "0.0.15",
+	"version": "0.0.16",
 	"homepage": "https://github.com/jstrinko/glipdown",
 	"author": {
 		"name": "Jeff Strinko",
@@ -17,7 +17,7 @@
 	},
 	"files": [
 		"markdown.js",
-		tlds.js
+		"tlds.js"
 	],
 	"licenses": [
 		{
