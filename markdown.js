@@ -1,6 +1,6 @@
 var TLDS = TLDS || [];
 if (typeof require != 'undefined') {
-	TLDS = require('tlds').TLDS;
+	TLDS = require('./tlds').TLDS;
 }
 
 function loadValidTLDS() {
