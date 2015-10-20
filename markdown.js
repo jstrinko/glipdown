@@ -1,4 +1,7 @@
-var TLDS = require('tlds').TLDS
+var TLDS = TLDS || [];
+if (typeof require != 'undefined') {
+	TLDS = require('tlds').TLDS;
+}
 
 function loadValidTLDS() {
 	var tldsArray = [];
