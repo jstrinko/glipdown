@@ -16,7 +16,8 @@
 		"url": "https://github.com/jstrinko/glipdown/issues"
 	},
 	"files": [
-		"markdown.js"
+		"markdown.js",
+		tlds.js
 	],
 	"licenses": [
 		{
