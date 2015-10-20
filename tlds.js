@@ -1084,4 +1084,6 @@ var TLDS =
 		'ZW'
 	];
 
-(module || {}).exports = TLDS;
+if (typeof exports == 'object') {
+	exports.TLDS = TLDS;
+}

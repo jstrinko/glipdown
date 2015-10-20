@@ -1,8 +1,4 @@
-var TLDS = TLDS || {};
-
-if(module && module.exports) {
-	TLDS = require('./tlds.js');
-}
+var TLDS = require('tlds').TLDS
 
 function loadValidTLDS() {
 	var tldsArray = [];
