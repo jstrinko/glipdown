@@ -1084,4 +1084,4 @@ var TLDS =
 		'ZW'
 	];
 
-module.exports = TLDS;
+(module || {}).exports = TLDS;
