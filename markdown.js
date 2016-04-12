@@ -192,6 +192,9 @@ var Markdown = function(raw, options) {
 		}).
 		replace(/\[code_(\w+)\]/g, function(full_match, which) {
 			return "<pre class=codesnippet>" + code_blocks['code_' + which] + "</pre>";
+		}).
+		replace(/mailto:<a href=/g, function(full_match, which) {
+			return "<a href=";
 		});
 	return val;
 };

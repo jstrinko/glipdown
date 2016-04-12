@@ -4,6 +4,11 @@ var Markdown = require('../markdown').Markdown,
 
 var tests = [
 	{ 
+		str: "email me at mailto:foo@bar.com or [mail my friend](mailto:myfriend@bar.com)",
+		len: 178,
+		escaped_len: 178
+	},
+	{ 
 		str: "some stuff [a link](https://google.bsd) and http://yngwie.sci/hey/now/#/foo?bar=true\n" +
 	"Some more stuff glip.bsd and [awesome is awesome](reddit.sci/foo/bar?hey=now#hoes) dont forget about \nhookers.asia",
 		len: 398,
