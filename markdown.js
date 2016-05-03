@@ -271,4 +271,5 @@ if (typeof exports == 'object') {
 	exports.Markdown = Markdown;
 	exports.Remove_Markdown = Remove_Markdown;
 	exports.Markdown_For_Search = Markdown_For_Search;
+	exports.Markdown_Is_Valid_Link = Markdown_Is_Valid_Link;
 }
