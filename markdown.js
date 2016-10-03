@@ -111,6 +111,7 @@ var Markdown = function(raw, options) {
 			var code;
 			try {
 				code = unescape(text);
+				code = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 			}
 			catch(error) {
 				code = text.replace(/(\%\w\w)/g, function(fm, esc) {
