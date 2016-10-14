@@ -50,6 +50,22 @@ var Markdown = function(raw, options) {
 			return "<a href='" + link + "' target='_blank' rel='noreferrer'>" + text + "</a>";
 			
 		}).
+		replace(/\[code\]([\s\S]*?)(\[\/code\]|$)/gi, function(full_match, text) {
+			var code;
+			try {
+				code = unescape(text);
+				code = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+			}
+			catch(error) {
+				code = text.replace(/(\%\w\w)/g, function(fm, esc) {
+					return unescape(esc);
+				});
+			}
+			code_blocks['code_' + block_count] = code;
+			var to_return = '[code_' + block_count + ']';
+			block_count++;
+			return to_return;
+		}).
 		replace(Markdown.global_url_regex, function(
 			full_match, 
 			maybe_email1,
@@ -106,22 +122,6 @@ var Markdown = function(raw, options) {
 				) + link.replace('&amp;', '&') + "' target='_blank' rel='noreferrer'>" + 
 					(maybe_email2 ? maybe_email2 : '') + 
 					link + "</a>" + last_char;
-		}).
-		replace(/\[code\]([\s\S]*?)(\[\/code\]|$)/gi, function(full_match, text) {
-			var code;
-			try {
-				code = unescape(text);
-				code = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-			}
-			catch(error) {
-				code = text.replace(/(\%\w\w)/g, function(fm, esc) {
-					return unescape(esc);
-				});
-			}
-			code_blocks['code_' + block_count] = code;
-			var to_return = '[code_' + block_count + ']';
-			block_count++;
-			return to_return;
 		}).
 		replace(/\|([^\n]*)\|(\s|\n|$)/g, function(full_match, text) {
 			var cols = text.split(/\|/);
