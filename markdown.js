@@ -7,13 +7,13 @@ function loadValidTLDS() {
 	var tldsArray = [];
 
 	TLDS.forEach(function(tld){
-		tldsArray.push('\\.' + tld + '(?!\\w)');
+		tldsArray.push('\\.' + tld + '(?!\\.|\\w)');
 	});
 
 	return tldsArray.join('|');
 }
 
-var validLinkMarkDownRegEx = new RegExp(loadValidTLDS() + '|^https?:\\/\\/', "i");
+var validLinkMarkDownRegEx = new RegExp('[a-zA-Z0-9](' + loadValidTLDS() + ')|^https?:\\/\\/[a-zA-Z0-9]', "i");
 
 var _ = _ || null;
 if ((typeof require != 'undefined') && !_) {
