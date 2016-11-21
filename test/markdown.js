@@ -57,13 +57,13 @@ var tests = [
 	},
 	{
 		str: '[code]\n__awesome__ google.com\n[/code]\n__awesome__ google.com',
-		len: 209,
-		escaped_len: 209
+		len: 144,
+		escaped_len: 144
 	},
 	{
 		str: '[code]\n~~awesome~~ google.com\n[/code]\n~~awesome google.com~~',
-		len: 219,
-		escaped_len: 219 
+		len: 154,
+		escaped_len: 154 
 	},
 	{
 		str: '&gt; some stuff[code]\n&gt; some more stuff[/code]\n&gt; even moar',
@@ -72,8 +72,8 @@ var tests = [
 	},
 	{
 		str: '[code][some link](http://heynow.com)[/code][legit](http://legit.com)',
-		len: 172,
-		escaped_len: 172
+		len: 184,
+		escaped_len: 184
 	},
 	{
 		str: '[oiasjdf@Ooijasdf.com](mailto:oiasjdf@Ooijasdf.com)',
@@ -142,7 +142,7 @@ var tests = [
 	},
 	{
 		str: '[code](a=$(location).attr("href").match(/https:\/\/([^\/]+)\/r(\/[^\?]+)?(.*)/))&&4<=a.length&&history.pushState(null,null,"https://"+a[1])',
-		len: 156,
+		len: 159,
 		escaped_len: 195
 	},
 	{
