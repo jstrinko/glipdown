@@ -3,6 +3,11 @@ var Markdown = require('../markdown').Markdown,
 	_ = require('underscore');
 
 var tests = [
+	{
+		str: "| **When** | 11:30am on Monday |\n| **Account** | dan@close.com |\n| **From** | Dave Varenos |\n| **To** | Dan Foody |",
+		len: 431,
+		escaped_len: 431
+	},
 	{ 
 		str: "email me at mailto:foo@bar.com or [mail my friend](mailto:myfriend@bar.com)",
 		len: 178,
