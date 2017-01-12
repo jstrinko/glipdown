@@ -4,6 +4,13 @@ var Markdown = require('../markdown').Markdown,
 
 var tests = [
 	{
+		str: "{{-{{img src=x onerror=prompt(document.cookie)}}-}}{{-{{/img}}-}}"
+		len: 45,
+		escaped_len: 45
+	},
+];
+var foo = [
+	{
 		str: "| **When** | 11:30am on Monday |\n| **Account** | dan@close.com |\n| **From** | Dave Varenos |\n| **To** | Dan Foody |",
 		len: 431,
 		escaped_len: 431
