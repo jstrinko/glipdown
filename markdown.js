@@ -38,8 +38,6 @@ var Markdown = function(raw, options) {
 	var total = 0;
 	var link_was_inside_tag = bold_in_url = italic_in_url = strike_in_url = underline_in_url = false;
 	var val = raw.replace(/\&\#x2F;/g, '/'). // not sure why underscore replaces these...docs don't even claim that it does 
-		replace(/{{-{{/g, '').
-		replace(/}}-}}/g, ''). // these should be removed to prevent exploit - better solution can be devised later
 		replace(/\[([^\]]*?)\]\(([\s\S]*?)\)/g, function(full_match, text, link) {
 			if (text === 'code') {
 				return full_match;
