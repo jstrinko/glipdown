@@ -47,6 +47,12 @@ var Markdown = function(raw, options) {
 				return full_match;
 			}
 
+			if (window && window.location && window.location.origin) {
+				if (link.indexOf(window.location.origin) === 0) {
+					return "<a href='" + link + "'>" + text + "</a>";
+				}
+			}
+
 			return "<a href='" + link + "' target='_blank' rel='noreferrer'>" + text + "</a>";
 			
 		}).
@@ -115,11 +121,18 @@ var Markdown = function(raw, options) {
 				}
 			}
 			//console.warn("nomatch:", +new Date() - sub_bench);
+			var no_blank = false;
+			if (window && window.location && window.location.origin) {
+				if (link.indexOf(window.location.origin) === 0) {
+					no_blank = true;
+				}
+			}
+
 			return "<a href='" + 
 				(
 					maybe_email2 && !protocol ? 'mailto:' + maybe_email2 : 
 						(protocol ? '' : 'http://') 
-				) + link.replace('&amp;', '&') + "' target='_blank' rel='noreferrer'>" + 
+				) + link.replace('&amp;', '&') + (no_blank ? "" : "' target='_blank'") + " rel='noreferrer'>" +
 					(maybe_email2 ? maybe_email2 : '') + 
 					link + "</a>" + last_char;
 		}).
