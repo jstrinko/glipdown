@@ -123,17 +123,16 @@ var Markdown = function(raw, options) {
 			//console.warn("nomatch:", +new Date() - sub_bench);
 			var no_blank = false;
 			if (window && window.location && window.location.origin) {
-				var full_link = protocol + link;
-				if (full_link.indexOf(window.location.origin) === 0) {
+				if (link.indexOf(window.location.origin) === 0) {
 					no_blank = true;
 				}
 			}
-			
+
 			return "<a href='" + 
 				(
 					maybe_email2 && !protocol ? 'mailto:' + maybe_email2 : 
 						(protocol ? '' : 'http://') 
-				) + link.replace('&amp;', '&') + no_blank ? "" : "' target='_blank'" + " rel='noreferrer'>" +
+				) + link.replace('&amp;', '&') + (no_blank ? "" : "' target='_blank'") + " rel='noreferrer'>" +
 					(maybe_email2 ? maybe_email2 : '') + 
 					link + "</a>" + last_char;
 		}).
