@@ -142,6 +142,7 @@ var Markdown = function(raw, options) {
 				}
 			}
 
+			link = link.replace(/[.,?]$/, function(m) { last_char = m; return ''; });
 			return "<a href='" + 
 				(
 					maybe_email2 && !protocol ? 'mailto:' + maybe_email2 : 
