@@ -172,7 +172,7 @@ var Markdown = function(raw, options) {
 					join("</li><li>") + 
 				"</li></ul>";
 		}).
-		replace(/\*\*(\S[^\*\*]*?\S)\*\*/g, function(full_match, text, offset, full_str) {
+		replace(/\*\*([^\*\*]+)\*\*/g, function(full_match, text, offset, full_str) {
 			total++;
 			if (Markdown.is_in_url(full_match, text, offset, full_str, bold_in_url, bold_last_offset)) {
 				bold_last_offset = offset;
@@ -183,7 +183,7 @@ var Markdown = function(raw, options) {
 			bold_in_url = false;
 			return "<b>" + text + "</b>";
 		}).
-		replace(/\*(\S[^\*]*?\S)\*/g, function(full_match, text, offset, full_str) {
+		replace(/\*([^\*]+)\*/g, function(full_match, text, offset, full_str) {
 			if (Markdown.is_in_url(full_match, text, offset, full_str, italic_in_url, italic_last_offset)) {
 				italic_last_offset = offset;
 				italic_in_url = true;
@@ -193,7 +193,7 @@ var Markdown = function(raw, options) {
 			italic_in_url = false;
 			return "<i>" + text + "</i>";
 		}).
-		replace(/__(\S[^__]*?\S)__/g, function(full_match, text, offset, full_str) {
+		replace(/__([^__]+)__/g, function(full_match, text, offset, full_str) {
 			if (Markdown.is_in_url(full_match, text, offset, full_str, underline_in_url, underline_last_offset)) {
 				underline_last_offset = offset;
 				underline_in_url = true;
@@ -203,7 +203,7 @@ var Markdown = function(raw, options) {
 			underline_in_url = false;
 			return "<u>" + text + "</u>";
 		}).
-		replace(/~~(\S[^~~]*?\S)~~/g, function(full_match, text, offset, full_str) {
+		replace(/~~([^~~]+)~~/g, function(full_match, text, offset, full_str) {
 			if (Markdown.is_in_url(full_match, text, offset, full_str, strike_in_url, strike_last_offset)) {
 				strike_last_offset = offset;
 				strike_in_url = true;
