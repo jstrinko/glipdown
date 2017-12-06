@@ -141,13 +141,15 @@ var Markdown = function(raw, options) {
 					}
 				}
 			}
-
-			link = link.replace(/[.,?]$/, function(m) { last_char = m; return ''; });
+			// ensures that the characters ".,?:;()*&!" will not become
+			// apart of a link if they are placed at the end of one
+			link = link.replace('&amp;', '&');
+			link = link.replace(/[.,?:;()*&!]$/, function(m) { last_char = m + ' '; return ''; });
 			return "<a href='" + 
 				(
 					maybe_email2 && !protocol ? 'mailto:' + maybe_email2 : 
 						(protocol ? '' : 'http://') 
-				) + link.replace('&amp;', '&') + (no_blank ? "" : "' target='_blank'") + " rel='noreferrer'>" +
+				) + link + (no_blank ? "" : "' target='_blank'") + " rel='noreferrer'>" +
 					(maybe_email2 ? maybe_email2 : '') + 
 					link + "</a>" + last_char;
 		}).
