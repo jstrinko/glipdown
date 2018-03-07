@@ -5,8 +5,8 @@ var Markdown = require('../markdown').Markdown,
 var tests = [
 	{
 		str: "{{-{{img src=x onerror=prompt(document.cookie)}}-}}{{-{{/img}}-}}",
-		len: 45,
-		escaped_len: 45
+		len: 65,
+		escaped_len: 65
 	},
 	{
 		str: "| **When** | 11:30am on Monday |\n| **Account** | dan@close.com |\n| **From** | Dave Varenos |\n| **To** | Dan Foody |",
@@ -108,7 +108,7 @@ var tests = [
 	{
 		str: 'mentioning <a class=\'at_mention_compose\' rel=\'{"id":1581073}\'>@https://glipdev.atlassian.net/browse/GLIP-3668</a> ',
 		len: 114,
-		escaped_len: 260
+		escaped_len: 259
 	},
 	{
 		str: 'this is a full.email@address.com for you',
@@ -138,7 +138,7 @@ var tests = [
 	{
 		str: '<body class="listing-chooser-collapsed with-listing-chooser front-page loggedin hot-page listing-page" ><div id="header" role="banner"><a tabindex="1" href="#content" id="jumpToContent">jump to content</a><div id="sr-header-area"><div class="width-clip"><div class="dropdown srdrop" onclick="open_menu(this)" onmouseover="hover_open_menu(this)"><span class="selected title">my subreddits</span></div><div class="drop-choices srdrop"><a href="http://www.reddit.com/r/ABitFuckedIfYouAskMe/" class="choice" >ABitFuckedIfYouAskMe</a><a href="http://www.reddit.com/r/analytics/" class="choice" >analytics</a><a href="http://www.reddit.com/r/Android/" class="choice" >Android</a><a href="http://www.reddit.com/r/aww/" class="choice" >aww</a><a href="http://www.reddit.com/r/bestof/" class="choice" >bestof</a><a href="http://www.reddit.com/r/budgetfood/" class="choice" >budgetfood</a><a href="http://www.reddit.com/r/civbeyondearth/" class="choice" >civbeyondearth</a><a href="http://www.reddit.com/r/climateskeptics/" class="choice" >climateskeptics</a><a href="http://www.reddit.com/r/compsci/" class="choice" >compsci</a><a href="http://www.reddit.com/r/conspiracy/" class="choice" >conspiracy</a><a href="http://www.reddit.com/r/CraftBeer/" class="choice" >CraftBeer</a><a href="http://www.reddit.com/r/DestructionPorn/" class="choice" >DestructionPorn</a><a href="http://www.reddit.com/r/DoesAnybodyElse/" class="choice" >DoesAnybodyElse</a><a href="http://www.reddit.com/r/drunkencookery/" class="choice" >drunkencookery</a><a href="http://www.reddit.com/r/EDC/" class="choice" >EDC</a><a href="http://www.reddit.com/r/environment/" class="choice" >environment</a><a href="http://www.reddit.com/r/funny/" class="choice" >funny</a><a href="http://www.reddit.com/r/GamePhysics/" class="choice" >GamePhysics</a><a href="http://www.reddit.com/r/gaming/" class="choice" >gaming</a><a href="http://www.reddit.com/r/geek/" class="choice" >geek</a><a href="http://www.reddit.com/r/getdisciplined/" class="choice" >getdisciplined</a><a href="http://www.reddit.com/r/gifextra/" class="choice" >gifextra</a><a href="http://www.reddit.com/r/glip/" class="choice" >glip</a><a href="http://www.reddit.com/r/HeavySeas/" class="choice" >HeavySeas</a><a href="http://www.reddit.com/r/HighQualityGifs/" class="choice" >HighQualityGifs</a><a href="http://www.reddit.com/r/homelab/" class="choice" >homelab</a><a href="http://www.reddit.com/r/ilerminaty/" class="choice" >ilerminaty</a><a href="http://www.reddit.com/r/InfernalMachine/" class="choice" >InfernalMachine</a><a href="http://www.reddit.com/r/investing/" class="choice" >investing</a><a href="http://www.reddit.com/r/JusticePorn/" class="choice" >JusticePorn</a><a href="http://www.reddit.com/r/Marinas_Boating/" class="choice" >Marinas_Boating</a><a href="http://www.reddit.com/r/marketing/" class="choice" >marketing</a><a href="http://www.reddit.com/r/Moviefails/" class="choice" >Moviefails</a><a href="http://www.reddit.com/r/netsec/" class="choice" >netsec</a><a href="http://www.reddit.com/r/PeterSchiff/" class="choice" >PeterSchiff</a><a href="http://www.reddit.com/r/philosophy/" class="choice" >philosophy</a><a href="http://www.reddit.com/r/politics/" class="choice" >politics</a><a href="http://www.reddit.com/r/programming/" class="choice" >programming</a><a href="http://www.reddit.com/r/pwned/" class="choice" >pwned</a><a href="http://www.reddit.com/r/QuarkCoin/" class="choice" >QuarkCoin</a><a href="http://www.reddit.com/r/rage/" class="choice" >rage</a><a href="http://www.reddit.com/r/restoretheforthfl/" class="choice" >restoretheforthfl</a><a href="http://www.reddit.com/r/Silverbugs/" class="choice" >Silverbugs</a><a href="http://www.reddit.com/r/SouthFlorida/" class="choice" >SouthFlorida</a><a href="http://www.reddit.com/r/space/" class="choice" >space</a><a href="http://www.reddit.com/r/startups/" class="choice" >startups</a><a href="http://www.reddit.com/r/technology/" class="choice" >technology</a><a href="http://www.reddit.com/r/todayilearned/" class="choice" >todayilearned</a><a href="http://www.reddit.com/r/WastedGifs/" class="choice" >WastedGifs</a><a href="http://www.reddit.com/r/Whatcouldgowrong/" class="choice" >Whatcouldgowrong</a><a href="http://www.reddit.com/subreddits/" class="bottom-option choice" >edit subscriptions</a></div><div class="sr-list"><ul class="flat-list sr-bar hover" ><li class=\'selected\'><a href="http://www.reddit.com/" class="choice" >front</a></li><li ><span class="separator">-</span><a href="http://www.reddit.com/r/all" class="choice" >all</a></li><li ><span class="separator">-</span><a href="http://www.reddit.com/r/random/" class="random choice" >random</a></li><li ><span class="separator">-</span><a href="http://www.reddit.com/r/mod" class="choice" >mod</a></li></ul><span class="separator">&nbsp;|&nbsp;</span><ul class="flat-list sr-bar hover" ><li ><a href="http://www.reddit.com/r/funny/" class="choice" >funny</a></li><li ><span class="separator">-</span><a href="http://www.reddit.com/r/aww/" class="choice" >aww</a></li><li ><span class="separator">-</span><a href="http://www.reddit.com/r/todayilearned/" class="choice" >todayilearned</a></li><li ><span class="separator">-</span><a href="http://www.reddit.com/r/gaming/" class="choice" >gaming</a></li><li ><span class="separator">-</span><a href="http://www.reddit.com/r/technology/" class="choice" >technology</a></li><li ><span class="separator">-</span><a href="http://www.reddit.com/r/politics/" class="choice" >politics</a></li><li ><span class="separator">-</span><a href="http://www.reddit.com/r/bestof/" class="choice" >bestof</a></li><li ><span class="separator">-</span><a href="http://www.reddit.com/r/conspiracy/" class="choice" >conspiracy</a></li><li ><span class="separator">-</span><a href="http://www.reddit.com/r/Android/" class="choice" >Android</a></li><li ><span class="separator">-</span><a href="http://www.reddit.com/r/JusticePorn/" class="choice" >JusticePorn</a></li><li ><span class="separator">-</span><a href="http://www.reddit.com/r/space/" class="choice" >space</a></li>',
 		len: 6088,
-		escaped_len: 14770
+		escaped_len: 14704
 	},
 	{
 		str: "**File**\n[calendar-jeff.ics](https://trello-attachments.s3.amazonaws.com/5463e14ac46008b0ec6feccf/553e4f4aa147ee4561e8c580/b66fa91c8224cfb458831a9618118c2f/calendar-jeff.ics)",
@@ -162,8 +162,8 @@ var tests = [
 	},
 	{
 		str: fs.readFileSync('etc/largeslowmarkdown.txt', 'utf8'),
-		len: 440048,
-		escaped_len: 564936
+		len: 439793,
+		escaped_len: 566105
 	},
 	/*
 		tests whether or not a link's regex is properly replacing the characters
