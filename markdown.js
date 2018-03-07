@@ -37,7 +37,7 @@ var Markdown = function(raw, options) {
 	var test = 0;
 	var total = 0;
 	var link_was_inside_tag = bold_in_url = italic_in_url = strike_in_url = underline_in_url = false;
-	var val = raw.replace(/\&\#x2F;/g, '/'). // not sure why underscore replaces these...docs don't even claim that it does 
+	var val = raw.replace(/\&\#x2F;/g, '/'). // not sure why underscore replaces these...docs don't even claim that it does
 		replace(/\[([^\]]*?)\]\(([\s\S]*?)\)/g, function(full_match, text, link) {
 			if (text === 'code') {
 				return full_match;
@@ -61,7 +61,7 @@ var Markdown = function(raw, options) {
 			}
 
 			return "<a href='" + link + "' target='_blank' rel='noreferrer'>" + text + "</a>";
-			
+
 		}).
 		replace(/\[code\]([\s\S]*?)(\[\/code\]|$)/gi, function(full_match, text) {
 			var code;
@@ -80,11 +80,11 @@ var Markdown = function(raw, options) {
 			return to_return;
 		}).
 		replace(Markdown.global_url_regex, function(
-			full_match, 
+			full_match,
 			maybe_email1,
 			maybe_email2,
-			link, 
-			proto_and_slashes, 
+			link,
+			proto_and_slashes,
 			protocol,
 			junk,
 			junkpoint5,
@@ -105,9 +105,6 @@ var Markdown = function(raw, options) {
 			var sub_bench = +new Date();
 			var start = full_str.substr(link_last_offset, offset - link_last_offset);
 			link_last_offset = offset;
-			if (start.match(/.*\($/)) {
-				return full_match;
-			}
 			var inside_tag = link_was_inside_tag ? (start.match(/.*>[^<]*$/) ? false : true) : start.match(/.*<[^>]*$/);
 			if (inside_tag) {
 				link_was_inside_tag = true;
@@ -145,12 +142,12 @@ var Markdown = function(raw, options) {
 			// apart of a link if they are placed at the end of one
 			link = link.replace('&amp;', '&');
 			link = link.replace(/[.,?:;()*&!]$/, function(m) { last_char = m + ' '; return ''; });
-			return "<a href='" + 
+			return "<a href='" +
 				(
-					maybe_email2 && !protocol ? 'mailto:' + maybe_email2 : 
-						(protocol ? '' : 'http://') 
+					maybe_email2 && !protocol ? 'mailto:' + maybe_email2 :
+						(protocol ? '' : 'http://')
 				) + link + (no_blank ? "" : "' target='_blank'") + " rel='noreferrer'>" +
-					(maybe_email2 ? maybe_email2 : '') + 
+					(maybe_email2 ? maybe_email2 : '') +
 					link + "</a>" + last_char;
 		}).
 		replace(/\|([^\n]*)\|(\s|\n|$)/g, function(full_match, text) {
@@ -169,9 +166,9 @@ var Markdown = function(raw, options) {
 			if (parts[0].length === 0) {
 				parts.shift();
 			}
-			return start + "<ul><li>" + 
+			return start + "<ul><li>" +
 				parts.map(function(part) { return part.replace(/^\* /, ''); }).
-					join("</li><li>") + 
+					join("</li><li>") +
 				"</li></ul>";
 		}).
 		replace(/\*\*([^\*\*]+)\*\*/g, function(full_match, text, offset, full_str) {
@@ -248,9 +245,9 @@ var Markdown_Is_Valid_Link = function(link) {
 	return validLinkMarkDownRegEx.test(link);
 }
 
-Markdown.tld_url_regex = validLinkMarkDownRegEx; 
+Markdown.tld_url_regex = validLinkMarkDownRegEx;
 Markdown.url_regex = /^((ftp|https?):\/\/)?[-\w]+\.([-\w]+\.)*(\d+\.\d+\.\d+|[-A-Za-z]+)(:\d+)?($|(\/\S?(\/\S)*\/?)|(\#\S?)|(\?\S?))/i;
-Markdown.global_url_regex = /(([a-zA-Z0-9\!\#\$\%\&\'\*\+\-\/\=\?\%\_\`\{\|\}\~\.]+@)?)(((ftp|https?):\/\/)?[-\w]+\.([-\w]+\.)*(\d+\.\d+\.\d+|[-A-Za-z]+)(:\d+)?(((\/([A-Za-z0-9-\._~:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=])*)+)\??([A-Za-z0-9-\._~:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=\%])*)?)([^A-Za-z]|$)/gi; 
+Markdown.global_url_regex = /(([a-zA-Z0-9\!\#\$\%\&\'\*\+\-\/\=\?\%\_\`\{\|\}\~\.]+@)?)(((ftp|https?):\/\/)?[-\w]+\.([-\w]+\.)*(\d+\.\d+\.\d+|[-A-Za-z]+)(:\d+)?(((\/([A-Za-z0-9-\._~:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=])*)+)\??([A-Za-z0-9-\._~:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=\%])*)?)([^A-Za-z]|$)/gi;
 
 var Markdown_For_Search = function(raw, options) {
 	options = options || {};
@@ -266,7 +263,7 @@ var Markdown_For_Search = function(raw, options) {
 var Remove_Markdown = function(raw, options) {
 	options = options || {};
 	return (options.dont_escape ? raw : _.escape(raw)).
-		replace(/\&\#x2F;/g, '/'). // not sure why underscore replaces these...docs don't even claim that it does 
+		replace(/\&\#x2F;/g, '/'). // not sure why underscore replaces these...docs don't even claim that it does
 		replace(/\[code\]/g, '').
 		replace(/\[\/code\]/g,'').
 		replace(/\|([^\n]*)\|/g, function(full_match, text) {
