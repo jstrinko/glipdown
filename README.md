@@ -188,20 +188,6 @@ Marked Text:
 ```
 Original Text:
 
-some stuff [a link](https://google.bsd) and http://yngwie.sci/hey/now/#/foo?bar=true
-Some more stuff glip.bsd and [awesome is awesome](reddit.sci/foo/bar?hey=now#hoes) dont forget about
-hookers.asia
-
-Marked Text:
-
-some stuff <a href='https://google.bsd' target='_blank' rel='noreferrer'>a link</a> and <a href='http://yngwie.sci/hey/now/#/foo?bar=true' target='_blank' rel='noreferrer'>http://yngwie.sci/hey/now/#/foo?bar=true</a>
-Some more stuff glip.bsd and [awesome is awesome](reddit.sci/foo/bar?hey=now#hoes) dont forget about
-<a href='http://hookers.asia' target='_blank' rel='noreferrer'>hookers.asia</a>
-```
-***********
-```
-Original Text:
-
 <a href="http://google.com" class="heynow"><img src="http://heynow.com">Words</a> https://google.com
 
 Marked Text:
