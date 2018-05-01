@@ -19,18 +19,6 @@ var tests = [
 		escaped_len: 178
 	},
 	{
-		str: "some stuff [a link](https://google.bsd) and http://yngwie.sci/hey/now/#/foo?bar=true\n" +
-	"Some more stuff glip.bsd and [awesome is awesome](reddit.sci/foo/bar?hey=now#hoes) dont forget about \nhookers.asia",
-		len: 398,
-		escaped_len: 398
-	},
-	{
-		str: "some stuff [a link](https://google.com) and https://yngwie.com/hey/now/#/foo?bar=true\n" +
-	"Some more stuff ftp://glip.com and [awesome is awesome](http://reddit.com/foo/bar?hey=now#hoes) dont forget about \nhookers.com",
-		len: 517,
-		escaped_len: 517
-	},
-	{
 		str: 'test.com jeff@gmail.com<a class="at_mention_post ico ico-files" mid="1234">jeff@gmail.com hey.com</a><b>jeff@gmail.com test.com</b><a href=foo.com>alreadyalink.com test.com foo.com</a>google.com jeff@gmail.com',
 		len: 607,
 		escaped_len: 1052
