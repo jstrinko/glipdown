@@ -1,3 +1,5 @@
+/*globals window */
+
 var TLDS = TLDS || [];
 if (typeof require != 'undefined') {
 	TLDS = require('./tlds').TLDS;
@@ -33,10 +35,18 @@ var Markdown = function(raw, options) {
 	var quote_tag = options.use_blockquote ? 'span class="blockquote"' : 'q';
 	var end_quote_tag = options.use_blockquote ? '/span' : '/q';
 	var bench = +new Date();
-	var link_last_offset = bold_last_offset = italic_last_offset = strike_last_offset = underline_last_offset = 0;
+	var link_last_offset = 0;
+	var bold_last_offset = 0;
+	var italic_last_offset = 0;
+	var strike_last_offset = 0;
+	var underline_last_offset = 0;
 	var test = 0;
 	var total = 0;
-	var link_was_inside_tag = bold_in_url = italic_in_url = strike_in_url = underline_in_url = false;
+	var link_was_inside_tag = 0;
+	var bold_in_url = false;
+	var italic_in_url = false;
+	var strike_in_url = false;
+	var underline_in_url = false;
 	var val = raw.replace(/\&\#x2F;/g, '/'). // not sure why underscore replaces these...docs don't even claim that it does
 		replace(/\[([^\]]*?)\]\(([\s\S]*?)\)/g, function(full_match, text, link) {
 			if (text === 'code') {
@@ -161,16 +171,28 @@ var Markdown = function(raw, options) {
 				"</tr></table>";
 		}).
 		replace(/<\/table><table>/g, '').
-		replace(/((^|\n)\* [^\*\n]*)+/g, function(full_match, junk, start) {
+	replace(/((^|\n)\* [^\n]*)+/g, function(full_match) {
 			var parts = full_match.split(/\n/);
 			if (parts[0].length === 0) {
 				parts.shift();
 			}
-			return start + "<ul><li>" +
+			return "<ul><li>" +
 				parts.map(function(part) { return part.replace(/^\* /, ''); }).
 					join("</li><li>") +
 				"</li></ul>";
 		}).
+		replace(/((^|\n)\d+\. [^\n]*)+/g, function (full_match) {
+			var parts = full_match.split(/\n/);
+			if (parts[0].length === 0) {
+				parts.shift();
+			}
+			return "<ol><li>" +
+				parts.map(function (part) {
+					return part.replace(/^\d+. /, '');
+				}).join("</li><li>") +
+				"</li></ol>";
+		}).
+		replace(/<\/([ou])l>\n/g, '</$1l>').
 		replace(/\*\*([^\*\*]+)\*\*/g, function(full_match, text, offset, full_str) {
 			total++;
 			if (Markdown.is_in_url(full_match, text, offset, full_str, bold_in_url, bold_last_offset)) {
@@ -243,7 +265,7 @@ Markdown.is_in_url = function(full_match, text, offset, full_str, already_in_url
 
 var Markdown_Is_Valid_Link = function(link) {
 	return validLinkMarkDownRegEx.test(link);
-}
+};
 
 Markdown.tld_url_regex = validLinkMarkDownRegEx;
 Markdown.url_regex = /^((ftp|https?):\/\/)?[-\w]+\.([-\w]+\.)*(\d+\.\d+\.\d+|[-A-Za-z]+)(:\d+)?($|(\/\S?(\/\S)*\/?)|(\#\S?)|(\?\S?))/i;
