@@ -171,7 +171,7 @@ var Markdown = function(raw, options) {
 				"</tr></table>";
 		}).
 		replace(/<\/table><table>/g, '').
-	replace(/((^|\n)\* [^\n]*)+/g, function(full_match) {
+		replace(/((^|\n)\* [^\n]*)+/g, function(full_match) {
 			var parts = full_match.split(/\n/);
 			if (parts[0].length === 0) {
 				parts.shift();
