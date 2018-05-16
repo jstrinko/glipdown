@@ -24,12 +24,18 @@ if ((typeof require != 'undefined') && !_) {
 
 var Markdown = function(raw, options) {
 	var options = options || {};
+	var phone_util;
+
 	if (!raw) {
 		return '';
 	}
 	if (!options.dont_escape) {
 		raw = _.escape(raw);
 	}
+	if (typeof Client !== 'undefined') {
+		phone_util = Client.get_controller('Phone_Number');
+	}
+
 	var code_blocks = {};
 	var block_count = 0;
 	var quote_tag = options.use_blockquote ? 'span class="blockquote"' : 'q';
@@ -47,8 +53,8 @@ var Markdown = function(raw, options) {
 	var italic_in_url = false;
 	var strike_in_url = false;
 	var underline_in_url = false;
-	var val = raw.replace(/\&\#x2F;/g, '/'). // not sure why underscore replaces these...docs don't even claim that it does
-		replace(/\[([^\]]*?)\]\(([\s\S]*?)\)/g, function(full_match, text, link) {
+	var val = raw.replace(/\&\#x2F;/g, '/') // not sure why underscore replaces these...docs don't even claim that it does
+		.replace(/\[([^\]]*?)\]\(([\s\S]*?)\)/g, function(full_match, text, link) {
 			if (text === 'code') {
 				return full_match;
 			}
@@ -72,8 +78,8 @@ var Markdown = function(raw, options) {
 
 			return "<a href='" + link + "' target='_blank' rel='noreferrer'>" + text + "</a>";
 
-		}).
-		replace(/\[code\]([\s\S]*?)(\[\/code\]|$)/gi, function(full_match, text) {
+		})
+		.replace(/\[code\]([\s\S]*?)(\[\/code\]|$)/gi, function(full_match, text) {
 			var code;
 			try {
 				code = unescape(text);
@@ -88,8 +94,8 @@ var Markdown = function(raw, options) {
 			var to_return = '[code_' + block_count + ']';
 			block_count++;
 			return to_return;
-		}).
-		replace(Markdown.global_url_regex, function(
+		})
+		.replace(Markdown.global_url_regex, function(
 			full_match,
 			maybe_email1,
 			maybe_email2,
@@ -159,8 +165,8 @@ var Markdown = function(raw, options) {
 				) + link + (no_blank ? "" : "' target='_blank'") + " rel='noreferrer'>" +
 					(maybe_email2 ? maybe_email2 : '') +
 					link + "</a>" + last_char;
-		}).
-		replace(/\|([^\n]*)\|(\s|\n|$)/g, function(full_match, text) {
+		})
+		.replace(/\|([^\n]*)\|(\s|\n|$)/g, function(full_match, text) {
 			var cols = text.split(/\|/);
 			if (!cols.length) {
 				return text;
@@ -169,9 +175,9 @@ var Markdown = function(raw, options) {
 			return "<table><tr valign='top'><td width='" + percent + "%'>" +
 					cols.join("</td><td width='" + percent + "%'>") +
 				"</tr></table>";
-		}).
-		replace(/<\/table><table>/g, '').
-		replace(/((^|\n)\* [^\n]*)+/g, function(full_match) {
+		})
+		.replace(/<\/table><table>/g, '')
+		.replace(/((^|\n)\* [^\n]*)+/g, function(full_match) {
 			var parts = full_match.split(/\n/);
 			if (parts[0].length === 0) {
 				parts.shift();
@@ -180,8 +186,8 @@ var Markdown = function(raw, options) {
 				parts.map(function(part) { return part.replace(/^\* /, ''); }).
 					join("</li><li>") +
 				"</li></ul>";
-		}).
-		replace(/((^|\n)\d+\. [^\n]*)+/g, function (full_match) {
+		})
+		.replace(/((^|\n)\d+\. [^\n]*)+/g, function (full_match) {
 			var parts = full_match.split(/\n/);
 			if (parts[0].length === 0) {
 				parts.shift();
@@ -191,9 +197,9 @@ var Markdown = function(raw, options) {
 					return part.replace(/^\d+. /, '');
 				}).join("</li><li>") +
 				"</li></ol>";
-		}).
-		replace(/<\/([ou])l>\n/g, '</$1l>').
-		replace(/\*\*([^\*\*]+)\*\*/g, function(full_match, text, offset, full_str) {
+		})
+		.replace(/<\/([ou])l>\n/g, '</$1l>')
+		.replace(/\*\*([^\*\*]+)\*\*/g, function(full_match, text, offset, full_str) {
 			total++;
 			if (Markdown.is_in_url(full_match, text, offset, full_str, bold_in_url, bold_last_offset)) {
 				bold_last_offset = offset;
@@ -203,8 +209,8 @@ var Markdown = function(raw, options) {
 			bold_last_offset = offset;
 			bold_in_url = false;
 			return "<b>" + text + "</b>";
-		}).
-		replace(/\*([^\*]+)\*/g, function(full_match, text, offset, full_str) {
+		})
+		.replace(/\*([^\*]+)\*/g, function(full_match, text, offset, full_str) {
 			if (Markdown.is_in_url(full_match, text, offset, full_str, italic_in_url, italic_last_offset)) {
 				italic_last_offset = offset;
 				italic_in_url = true;
@@ -213,8 +219,8 @@ var Markdown = function(raw, options) {
 			italic_last_offset = offset;
 			italic_in_url = false;
 			return "<i>" + text + "</i>";
-		}).
-		replace(/__([^__]+)__/g, function(full_match, text, offset, full_str) {
+		})
+		.replace(/__([^__]+)__/g, function(full_match, text, offset, full_str) {
 			if (Markdown.is_in_url(full_match, text, offset, full_str, underline_in_url, underline_last_offset)) {
 				underline_last_offset = offset;
 				underline_in_url = true;
@@ -223,8 +229,8 @@ var Markdown = function(raw, options) {
 			underline_last_offset = offset;
 			underline_in_url = false;
 			return "<u>" + text + "</u>";
-		}).
-		replace(/~~([^~~]+)~~/g, function(full_match, text, offset, full_str) {
+		})
+		.replace(/~~([^~~]+)~~/g, function(full_match, text, offset, full_str) {
 			if (Markdown.is_in_url(full_match, text, offset, full_str, strike_in_url, strike_last_offset)) {
 				strike_last_offset = offset;
 				strike_in_url = true;
@@ -233,18 +239,25 @@ var Markdown = function(raw, options) {
 			strike_last_offset = offset;
 			strike_in_url = false;
 			return "<strike>" + text + "</strike>";
-		}).
-		replace(/\{\{\[\[-([^\{\{\[\[]*?)-\]\]\}\}/g, function(full_match, text, offset, full_str) {
+		})
+		.replace(/\{\{\[\[-([^\{\{\[\[]*?)-\]\]\}\}/g, function(full_match, text, offset, full_str) {
 			return "<span class='search_match_stream'>" + text + "</span>";
-		}).
-		replace(/(^|\n)&gt; ([^\n]*)/g, function(full_match, start, text) {
+		})
+		.replace(/(^|\n)&gt; ([^\n]*)/g, function(full_match, start, text) {
 			return start + "<" + quote_tag + ">" + text + "<" + end_quote_tag + ">";
-		}).
-		replace(/\[code_(\w+)\]/g, function(full_match, which) {
+		})
+		.replace(/\[code_(\w+)\]/g, function(full_match, which) {
 			return "<pre class=codesnippet>" + code_blocks['code_' + which] + "</pre>";
-		}).
-		replace(/mailto:<a href=/g, function(full_match, which) {
+		})
+		.replace(/mailto:<a href=/g, function(full_match, which) {
 			return "<a href=";
+		})
+		.replace(/\S*\d+\S*/g, function mark_phone_numbers(match) {
+			if (!phone_util || !phone_util.is_valid_pstn(match)) {
+				return match;
+			}
+
+			return "<a href='tel:" + match + "' class='markdown_phone_number'>" + match + '</a>';
 		});
 	return val;
 };
