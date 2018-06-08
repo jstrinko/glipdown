@@ -189,10 +189,15 @@ var Markdown = function(raw, options) {
 		})
 		.replace(/((^|\n)\d+\. [^\n]*)+/g, function (full_match) {
 			var parts = full_match.split(/\n/);
+			var start = parseInt(full_match, 10);
+			var start_text = "";
 			if (parts[0].length === 0) {
 				parts.shift();
 			}
-			return "<ol><li>" +
+			if (!isNaN(start) && start > 1) {
+				start_text = " start=" + start + " style='counter-reset: li " + (start - 1) + "'";
+			}
+			return "<ol" + start_text +"><li>" +
 				parts.map(function (part) {
 					return part.replace(/^\d+. /, '');
 				}).join("</li><li>") +
