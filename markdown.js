@@ -24,7 +24,8 @@ if ((typeof require != 'undefined') && !_) {
 
 var Markdown = function(raw, options) {
 	var options = options || {};
-	var phone_util;
+	// Disabling Until Clickable phone numbers is ready for production
+	// var phone_util;
 
 	if (!raw) {
 		return '';
@@ -32,9 +33,10 @@ var Markdown = function(raw, options) {
 	if (!options.dont_escape) {
 		raw = _.escape(raw);
 	}
-	if (typeof Client !== 'undefined') {
-		phone_util = Client.get_controller('Phone_Number');
-	}
+	// Disabling Until Clickable phone numbers is ready for production
+	// if (typeof Client !== 'undefined') {
+	// 	phone_util = Client.get_controller('Phone_Number');
+	// }
 
 	var code_blocks = {};
 	var block_count = 0;
@@ -256,14 +258,15 @@ var Markdown = function(raw, options) {
 		})
 		.replace(/mailto:<a href=/g, function(full_match, which) {
 			return "<a href=";
-		})
-		.replace(/\S*\d+\S*/g, function mark_phone_numbers(match) {
-			if (!phone_util || !phone_util.is_valid_pstn(match)) {
-				return match;
-			}
-
-			return "<a href='tel:" + match + "' class='markdown_phone_number'>" + match + '</a>';
 		});
+		// Disabling Until Clickable phone numbers is ready for production
+		// .replace(/\S*\d+\S*/g, function mark_phone_numbers(match) {
+		// 	if (!phone_util || !phone_util.is_valid_pstn(match)) {
+		// 		return match;
+		// 	}
+
+		// 	return "<a href='tel:" + match + "' class='markdown_phone_number'>" + match + '</a>';
+		// });
 	return val;
 };
 
