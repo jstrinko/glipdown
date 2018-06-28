@@ -1,4 +1,4 @@
-/*globals window */
+/*globals window, Client */
 
 var TLDS = TLDS || [];
 if (typeof require != 'undefined') {
@@ -80,6 +80,9 @@ var Markdown = function(raw, options) {
 
 			return "<a href='" + link + "' target='_blank' rel='noreferrer'>" + text + "</a>";
 
+		})
+		.replace(/((^|\n)&gt; ([^\n]*))+/g, function(full_match) {
+			return "<" + quote_tag + ">\n" + full_match.trim().replace(/^&gt; /gm, '') + "\n<" + end_quote_tag + ">";
 		})
 		.replace(/\[code\]([\s\S]*?)(\[\/code\]|$)/gi, function(full_match, text) {
 			var code;
@@ -249,9 +252,6 @@ var Markdown = function(raw, options) {
 		})
 		.replace(/\{\{\[\[-([^\{\{\[\[]*?)-\]\]\}\}/g, function(full_match, text, offset, full_str) {
 			return "<span class='search_match_stream'>" + text + "</span>";
-		})
-		.replace(/(^|\n)&gt; ([^\n]*)/g, function(full_match, start, text) {
-			return start + "<" + quote_tag + ">" + text + "<" + end_quote_tag + ">";
 		})
 		.replace(/\[code_(\w+)\]/g, function(full_match, which) {
 			return "<pre class=codesnippet>" + code_blocks['code_' + which] + "</pre>";
