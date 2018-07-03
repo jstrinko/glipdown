@@ -56,7 +56,7 @@ var Markdown = function(raw, options) {
 	var strike_in_url = false;
 	var underline_in_url = false;
 	var val = raw.replace(/\&\#x2F;/g, '/') // not sure why underscore replaces these...docs don't even claim that it does
-		.replace(/\[([^\]]*?)\]\(([\s\S]*?)\)/g, function(full_match, text, link) {
+		.replace(/\[(.*[^\\](?=\]))\]\(([\s\S]*?)\)/g, function(full_match, text, link) {
 			if (text === 'code') {
 				return full_match;
 			}
@@ -64,6 +64,8 @@ var Markdown = function(raw, options) {
 			if(!validLinkMarkDownRegEx.test(link)) {
 				return full_match;
 			}
+
+			text = text.replace(/\\([\[\]])/g, '$1');
 
 			if (typeof window !== 'undefined') {
 				if (window.location && window.location.origin) {
