@@ -24,7 +24,7 @@ if ((typeof require != 'undefined') && !_) {
 
 var Markdown = function(raw, options) {
 	var options = options || {};
-	// var phone_util;
+	var phone_util;
 
 	if (!raw) {
 		return '';
@@ -32,11 +32,9 @@ var Markdown = function(raw, options) {
 	if (!options.dont_escape) {
 		raw = _.escape(raw);
 	}
-	/*
 	if (typeof Client !== 'undefined') {
 		phone_util = Client.get_controller('Phone_Number');
 	}
-	*/
 
 	var code_blocks = {};
 	var block_count = 0;
@@ -260,8 +258,7 @@ var Markdown = function(raw, options) {
 		})
 		.replace(/mailto:<a href=/g, function(full_match, which) {
 			return "<a href=";
-		});
-		/*
+		})
 		.replace(/(?:\+)?(?:\d)?(?:\s|\.|-)?(?:\()?\d{3}(?:\))?(?:-|\s|.)?\d{3}(?:-|\s|\.)?\d{2}(?:\s|\.|-)?\d{2}/g, function mark_phone_numbers(match) {
 			if (!phone_util || !phone_util.is_valid_pstn(match)) {
 				return match;
@@ -269,7 +266,7 @@ var Markdown = function(raw, options) {
 
 			return "<a href='tel:" + match + "' class='markdown_phone_number'>" + match + '</a>';
 		});
-		*/
+
 	return val;
 };
 
