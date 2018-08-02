@@ -54,7 +54,15 @@ var Markdown = function(raw, options) {
 	var strike_in_url = false;
 	var underline_in_url = false;
 	var val = raw.replace(/\&\#x2F;/g, '/') // not sure why underscore replaces these...docs don't even claim that it does
-		.replace(/\[(.*?[^\\])\]\((.*?[^\\])\)/g, function(full_match, text, link) {
+		.replace(/\\]|\\\)/g, function (match) {
+			return {
+				'\\]': '%5D',
+				'\\\)': '%29'
+			}[match]
+		})
+		.replace(/\[([^\]]*?)]\(([^)]*?)\)/g, function(full_match, text, link) {
+			text = String(text).replace(/%5D/g, ']');
+			link = String(link).replace(/'%29/g, ')');
 			if (text === 'code') {
 				return full_match;
 			}
@@ -81,8 +89,14 @@ var Markdown = function(raw, options) {
 			return "<a href='" + link + "' target='_blank' rel='noreferrer'>" + text + "</a>";
 
 		})
-		.replace(/((^|\n)&gt; ([^\n]*))+/g, function(full_match) {
-			return "<" + quote_tag + ">\n" + full_match.trim().replace(/^&gt; /gm, '') + "\n<" + end_quote_tag + ">";
+		.replace(/%5D|%29/g, function (match) { //for the rare cases of escaped brackets happening outside of links
+			return {
+				'%5D': '\\]',
+				'%29': '\\\)'
+			}[match]
+		})
+		.replace(/((^|\n)&gt; ([^\n]*))+\n?/g, function(full_match) {
+			return "<" + quote_tag + ">" + full_match.trim().replace(/^&gt; /gm, '') + "<" + end_quote_tag + ">";
 		})
 		.replace(/\[code\]([\s\S]*?)(\[\/code\]|$)/gi, function(full_match, text) {
 			var code;
