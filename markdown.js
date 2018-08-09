@@ -25,7 +25,7 @@ if ((typeof require != 'undefined') && !_) {
 var Markdown = function(raw, options) {
 	var options = options || {};
 	// var phone_util;
-	var is_valid_pstn;
+	// var is_valid_pstn;
 
 	if (!raw) {
 		return '';
