@@ -24,7 +24,8 @@ if ((typeof require != 'undefined') && !_) {
 
 var Markdown = function(raw, options) {
 	var options = options || {};
-	var phone_util;
+	// var phone_util;
+	var is_valid_pstn;
 
 	if (!raw) {
 		return '';
@@ -32,9 +33,12 @@ var Markdown = function(raw, options) {
 	if (!options.dont_escape) {
 		raw = _.escape(raw);
 	}
-	if (typeof Client !== 'undefined') {
-		phone_util = Client.get_controller('Phone_Number');
-	}
+	// if (typeof Client !== 'undefined') {
+	// 	phone_util = Client.get_controller('Phone_Number');
+	// 	is_valid_pstn = typeof phone_util.is_valid_pstn === 'function' ?
+	// 		phone_util.is_valid_pstn :
+	// 		null;
+	// }
 
 	var code_blocks = {};
 	var block_count = 0;
@@ -272,14 +276,14 @@ var Markdown = function(raw, options) {
 		})
 		.replace(/mailto:<a href=/g, function(full_match, which) {
 			return "<a href=";
-		})
-		.replace(/(?:\+)?(?:\d)?(?:\s|\.|-)?(?:\()?\d{3}(?:\))?(?:-|\s|.)?\d{3}(?:-|\s|\.)?\d{2}(?:\s|\.|-)?\d{2}/g, function mark_phone_numbers(match) {
-			if (!phone_util || !phone_util.is_valid_pstn(match)) {
-				return match;
-			}
-
-			return "<a href='tel:" + match + "' class='markdown_phone_number'>" + match + '</a>';
 		});
+		// .replace(/(?:\+)?(?:\d)?(?:\s|\.|-)?(?:\()?\d{3}(?:\))?(?:-|\s|.)?\d{3}(?:-|\s|\.)?\d{2}(?:\s|\.|-)?\d{2}/g, function mark_phone_numbers(match) {
+		// 	if (!is_valid_pstn || !is_valid_pstn(match)) {
+		// 		return match;
+		// 	}
+
+		// 	return "<a href='tel:" + match + "' class='markdown_phone_number'>" + match + '</a>';
+		// });
 
 	return val;
 };
