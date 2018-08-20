@@ -8,7 +8,7 @@ if (typeof require != 'undefined') {
 function loadValidTLDS() {
 	var tldsArray = [];
 
-	TLDS.forEach(function (tld) {
+	TLDS.forEach(function(tld){
 		tldsArray.push('\\.' + tld + '(?!\\.|\\w)');
 	});
 
@@ -22,7 +22,7 @@ if ((typeof require != 'undefined') && !_) {
 	var _ = require('underscore');
 }
 
-var Markdown = function (raw, options) {
+var Markdown = function(raw, options) {
 	var options = options || {};
 	var phone_util;
 	var is_valid_pstn = function () {
@@ -57,7 +57,7 @@ var Markdown = function (raw, options) {
 				'\\\)': '%29'
 			}[match]
 		})
-		.replace(/\[([^\]]*?)]\(([^)]*?)\)/g, function (full_match, text, link) {
+		.replace(/\[([^\]]*?)]\(([^)]*?)\)/g, function(full_match, text, link) {
 			text = String(text).replace(/%5D/g, ']');
 			link = String(link).replace(/'%29/g, ')');
 			if (text === 'code') {
@@ -92,15 +92,16 @@ var Markdown = function (raw, options) {
 				'%29': '\\\)'
 			}[match]
 		})
-		.replace(/((^|\n)&gt; ([^\n]*))+\n?/g, function (full_match) {
+		.replace(/((^|\n)&gt; ([^\n]*))+\n?/g, function(full_match) {
 			return "<" + quote_tag + ">" + full_match.trim().replace(/^&gt; /gm, '') + "<" + end_quote_tag + ">";
 		})
-		.replace(/\[code\]([\s\S]*?)(\[\/code\]|$)/gi, function (full_match, text) {
+		.replace(/\[code\]([\s\S]*?)(\[\/code\]|$)/gi, function(full_match, text) {
 			var code;
 			try {
 				code = unescape(text);
 				code = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-			} catch (error) {
+			}
+			catch (error) {
 				code = text.replace(/(\%\w\w)/g, function (fm, esc) {
 					return unescape(esc);
 				});
@@ -110,7 +111,7 @@ var Markdown = function (raw, options) {
 			block_count++;
 			return to_return;
 		})
-		.replace(Markdown.global_url_regex, function (
+		.replace(Markdown.global_url_regex, function(
 			full_match,
 			maybe_email1,
 			maybe_email2,
@@ -192,27 +193,25 @@ var Markdown = function (raw, options) {
 
 			return link_token + last_char;
 		})
-		.replace(/\|([^\n]*)\|(\s|\n|$)/g, function (full_match, text) {
+		.replace(/\|([^\n]*)\|(\s|\n|$)/g, function(full_match, text) {
 			var cols = text.split(/\|/);
 			if (!cols.length) {
 				return text;
 			}
 			var percent = (100 / cols.length).toFixed(0);
 			return "<table><tr valign='top'><td width='" + percent + "%'>" +
-				cols.join("</td><td width='" + percent + "%'>") +
+					cols.join("</td><td width='" + percent + "%'>") +
 				"</tr></table>";
 		})
 		.replace(/<\/table><table>/g, '')
-		.replace(/((^|\n)\* [^\n]*)+/g, function (full_match) {
+		.replace(/((^|\n)\* [^\n]*)+/g, function(full_match) {
 			var parts = full_match.split(/\n/);
 			if (parts[0].length === 0) {
 				parts.shift();
 			}
 			return "<ul><li>" +
-				parts.map(function (part) {
-					return part.replace(/^\* /, '');
-				}).
-			join("</li><li>") +
+				parts.map(function (part) { return part.replace(/^\* /, ''); }).
+					join("</li><li>") +
 				"</li></ul>";
 		})
 		.replace(/((^|\n)\d+\. [^\n]*)+/g, function (full_match) {
@@ -225,7 +224,7 @@ var Markdown = function (raw, options) {
 			if (!isNaN(start) && start > 1) {
 				start_text = " start=" + start + " style='counter-reset: li " + (start - 1) + "'";
 			}
-			return "<ol" + start_text + "><li>" +
+			return "<ol" + start_text +"><li>" +
 				parts.map(function (part) {
 					return part.replace(/^\d+. /, '');
 				}).join("</li><li>") +
@@ -244,10 +243,10 @@ var Markdown = function (raw, options) {
 		.replace(/~~([^~~]+)~~/g, function (full_match, text) {
 			return "<strike>" + text + "</strike>";
 		})
-		.replace(/\{\{\[\[-([^\{\{\[\[]*?)-\]\]\}\}/g, function (full_match, text) {
+		.replace(/\{\{\[\[-([^\{\{\[\[]*?)-\]\]\}\}/g, function(full_match, text) {
 			return "<span class='search_match_stream'>" + text + "</span>";
 		})
-		.replace(/\[code_(\w+)\]/g, function (full_match, which) {
+		.replace(/\[code_(\w+)\]/g, function(full_match, which) {
 			return "<pre class=codesnippet>" + code_blocks['code_' + which] + "</pre>";
 		})
 		.replace(Markdown.potential_phone_regex, function mark_phone_numbers(match) {
@@ -276,13 +275,11 @@ Markdown.potential_phone_regex = /\+?(?:\d{1,4} ?)?(?:(?:\(\d{1,4}\)|\d(?:(?: |\
 
 var Markdown_For_Search = function (raw, options) {
 	options = options || {};
-	if (!raw) {
-		return '';
-	}
+	if (!raw) { return ''; }
 	if (!options.dont_escape) {
 		raw = _.escape(raw);
 	}
-	return raw.replace(/\{\{\[\[-([^\{\{\[\[]*?)-\]\]\}\}/g, function (full_match, text) {
+	return raw.replace(/\{\{\[\[-([^\{\{\[\[]*?)-\]\]\}\}/g, function(full_match, text) {
 		return "<span class='search_match_stream'>" + text + "</span>";
 	});
 };
