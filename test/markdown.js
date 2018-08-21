@@ -86,7 +86,7 @@ var tests = [
 	{
 		str: '<a href class="at_mention_post ico ico-link" mid="1581073">http://glipdev.atlassian.net/browse/GLIP-3668</a>',
 		len: 108,
-		escaped_len: 243
+		escaped_len: 242
 	},
 	{
 		str: '{{-{{a href class="at_mention_post ico ico-link" mid="1581073"}}-}}http://glipdev.atlassian.net/browse/GLIP-3668{{-{{/a}}-}}',
@@ -150,8 +150,8 @@ var tests = [
 	},
 	{
 		str: fs.readFileSync('etc/largeslowmarkdown.txt', 'utf8'),
-		len: 439793,
-		escaped_len: 566105
+		len: 440100,
+		escaped_len: 566128
 	},
 	/*
 		tests whether or not a link's regex is properly replacing the characters
@@ -160,38 +160,38 @@ var tests = [
 	*/
 	{
 		str: 'https://jira.ringcentral.com/browse/GLIP-16249:',
-		len: 142,
-		escaped_len: 142
+		len: 141,
+		escaped_len: 141
 	},
 	{
 		str: 'https://jira.ringcentral.com/browse/GLIP-16249;',
-		len: 142,
-		escaped_len: 142
+		len: 141,
+		escaped_len: 141
 	},
 	{
 		str: 'https://jira.ringcentral.com/browse/GLIP-16249(',
-		len: 142,
-		escaped_len: 142
+		len: 141,
+		escaped_len: 141
 	},
 	{
 		str: 'https://jira.ringcentral.com/browse/GLIP-16249)',
-		len: 142,
-		escaped_len: 142
+		len: 141,
+		escaped_len: 141
 	},
 	{
 		str: 'https://jira.ringcentral.com/browse/GLIP-16249*',
-		len: 142,
-		escaped_len: 142
+		len: 141,
+		escaped_len: 141
 	},
 	{
 		str: 'https://jira.ringcentral.com/browse/GLIP-16249&',
-		len: 142,
-		escaped_len: 142
+		len: 141,
+		escaped_len: 141
 	},
 	{
 		str: 'https://jira.ringcentral.com/browse/GLIP-16249!',
-		len: 142,
-		escaped_len: 142
+		len: 141,
+		escaped_len: 141
 	},
 	{
 		str: 'https://jira.ringcentral.com/browse/GLIP-16249: test',
