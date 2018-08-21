@@ -251,24 +251,19 @@ var Markdown = function(raw, options) {
 		.replace(/\[code_(\w+)\]/g, function(full_match, which) {
 			return "<pre class=codesnippet>" + code_blocks['code_' + which] + "</pre>";
 		})
+		/*
 		.replace(Markdown.potential_phone_regex, function mark_phone_numbers(match) {
 			return is_valid_pstn(match) ?
 				"<a href='tel:" + match + "' class='markdown_phone_number'>" + match + '</a>' :
 				match;
 		})
+		*/
 		.replace(/{{--LINK-(\d*)--}}/g, function (link_token, link_index) {
 			return link_array[link_index] || link_token;
 		})
 		.replace(/mailto:<a href=/g, function (full_match, which) {
 			return "<a href=";
 		});
-	// .replace(/(?:\+)?(?:\d)?(?:\s|\.|-)?(?:\()?\d{3}(?:\))?(?:-|\s|.)?\d{3}(?:-|\s|\.)?\d{2}(?:\s|\.|-)?\d{2}/g, function mark_phone_numbers(match) {
-	// 	if (!is_valid_pstn || !is_valid_pstn(match)) {
-	// 		return match;
-	// 	}
-
-	// 	return "<a href='tel:" + match + "' class='markdown_phone_number'>" + match + '</a>';
-	// });
 
 	return val;
 };
