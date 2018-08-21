@@ -93,7 +93,7 @@ var Markdown = function(raw, options) {
 			}[match]
 		})
 		.replace(/((^|\n)&gt; ([^\n]*))+\n?/g, function(full_match) {
-			return "<" + quote_tag + ">" + full_match.trim().replace(/^&gt; /gm, '') + "<" + end_quote_tag + ">";
+			return "<" + quote_tag + ">\n" + full_match.trim().replace(/^&gt; /gm, '') + "\n<" + end_quote_tag + ">";
 		})
 		.replace(/\[code\]([\s\S]*?)(\[\/code\]|$)/gi, function(full_match, text) {
 			var code;
@@ -229,6 +229,8 @@ var Markdown = function(raw, options) {
 					return part.replace(/^\d+. /, '');
 				}).join("</li><li>") +
 				"</li></ol>";
+		}).replace(new RegExp("<" + quote_tag + ">((?:.|\\n)+)<" + end_quote_tag + ">", 'gm'), function(full_match, p1) {
+			return "<" + quote_tag + ">" + p1.trim() + "<" + end_quote_tag + ">";
 		})
 		.replace(/<\/([ou])l>\n/g, '</$1l>')
 		.replace(/\*\*([^\*\*]+)\*\*/g, function (full_match, text) {
@@ -260,6 +262,13 @@ var Markdown = function(raw, options) {
 		.replace(/mailto:<a href=/g, function (full_match, which) {
 			return "<a href=";
 		});
+	// .replace(/(?:\+)?(?:\d)?(?:\s|\.|-)?(?:\()?\d{3}(?:\))?(?:-|\s|.)?\d{3}(?:-|\s|\.)?\d{2}(?:\s|\.|-)?\d{2}/g, function mark_phone_numbers(match) {
+	// 	if (!is_valid_pstn || !is_valid_pstn(match)) {
+	// 		return match;
+	// 	}
+
+	// 	return "<a href='tel:" + match + "' class='markdown_phone_number'>" + match + '</a>';
+	// });
 
 	return val;
 };
