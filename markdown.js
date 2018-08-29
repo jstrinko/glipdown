@@ -251,13 +251,11 @@ var Markdown = function(raw, options) {
 		.replace(/\[code_(\w+)\]/g, function(full_match, which) {
 			return "<pre class=codesnippet>" + code_blocks['code_' + which] + "</pre>";
 		})
-		/*
 		.replace(Markdown.potential_phone_regex, function mark_phone_numbers(match) {
 			return is_valid_pstn(match) ?
 				"<a href='tel:" + match + "' class='markdown_phone_number'>" + match + '</a>' :
 				match;
 		})
-		*/
 		.replace(/{{--LINK-(\d*)--}}/g, function (link_token, link_index) {
 			return link_array[link_index] || link_token;
 		})
