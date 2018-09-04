@@ -252,7 +252,7 @@ var Markdown = function(raw, options) {
 			return "<pre class=codesnippet>" + code_blocks['code_' + which] + "</pre>";
 		})
 		.replace(Markdown.potential_phone_regex, function mark_phone_numbers(match) {
-			return is_valid_pstn(match) ?
+			return match !== '911' & match !== '999' && is_valid_pstn(match) ?
 				"<a href='tel:" + match + "' class='markdown_phone_number'>" + match + '</a>' :
 				match;
 		})
