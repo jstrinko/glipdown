@@ -44,8 +44,6 @@ function build_location_cache(cache, raw_string, match_pattern_array) {
 		locations: []
 	};
 
-	// console.log('string_to_match: ', string_to_match);
-
 	regexp_array.forEach(function(match_pattern) {
 		var index = 0;
 		var position;
@@ -68,7 +66,6 @@ function build_location_cache(cache, raw_string, match_pattern_array) {
 		}
 	});
 
-	// console.log('location_cache: ', location_cache);
 	return location_cache;
 }
 
