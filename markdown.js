@@ -22,6 +22,80 @@ if ((typeof require != 'undefined') && !_) {
 	var _ = require('underscore');
 }
 
+var anchor_tag_regexp = new RegExp('<a.*?>.*?<\/a>', 'g');
+var tokenized_anchor_tag_regexp = new RegExp('{{-{{a.*?}}-}}.*?{{-{{\/a}}-}}', 'g');
+var escaped_anchor_tag_regexp = new RegExp('&(?:amp;){0,2}lt;a.*?&(?:amp;){0,2}gt;.*?&(?:amp;){0,2}lt;(?:\/|&(?:amp;){0,2}#x2F;)a&(?:amp;){0,2}gt;', 'g');
+var any_tag_regexp = new RegExp('<[a-z].*?>', 'g');
+var tokenized_any_tag_regexp = new RegExp('{{-{{[a-z].*?}}-}}', 'g');
+var escaped_any_tag_regexp = new RegExp('&(?:amp;){0,2}lt;[a-z].*?&(?:amp;){0,2}?gt;', 'g');
+
+
+function build_location_cache(cache, raw_string, match_pattern_array) {
+	var location_cache;
+	var string_to_match = typeof raw_string === 'string' ? raw_string : '';
+	var regexp_array = Array.isArray(match_pattern_array) ? match_pattern_array : [];
+
+	if (cache && cache.built) {
+		return cache;
+	};
+
+	location_cache = {
+		built: true,
+		locations: []
+	};
+
+	regexp_array.forEach(function(match_pattern) {
+		var index = 0;
+		var position;
+		var match_regexp = match_pattern instanceof RegExp ? match_pattern : new RegExp();
+		var matches = string_to_match.match(match_regexp) || [];
+		var matched_tag_locations = {};
+
+		for (index = 0; index < matches.length; index++) {
+			current_match = matches[index];
+			position = string_to_match.indexOf(
+				current_match,
+				matched_tag_locations[current_match] || 0
+			);
+			matched_tag_locations[current_match] = position + 1;
+
+			location_cache.locations.push({
+				start: position,
+				end: position + current_match.length
+			});
+		}
+	});
+
+	return location_cache;
+}
+
+function is_in_location_cache(cache, location_to_check) {
+	var found_in_cache;
+	var location_object_array;
+	var array_length;
+	var location_object;
+
+	if (!cache ||
+		!cache.locations ||
+		!Array.isArray(cache.locations) ||
+		typeof location_to_check !== 'number'
+	) {
+		return false;
+	}
+
+	location_object_array = cache.locations.slice().reverse();
+	array_length = location_object_array.length;
+
+	while(array_length && !found_in_cache) {
+		location_object = location_object_array[array_length -1];
+		found_in_cache = location_to_check > location_object.start &&
+			location_to_check < location_object.end;
+		array_length -= 1;
+	}
+
+	return found_in_cache;
+}
+
 var Markdown = function(raw, options) {
 	var options = options || {};
 	var phone_util;
@@ -49,6 +123,7 @@ var Markdown = function(raw, options) {
 	var link_last_offset = 0;
 	var link_was_inside_tag = 0;
 	var link_array = [];
+	var anchor_tag_location_cache;
 
 	var val = raw.replace(/\&\#x2F;/g, '/') // not sure why underscore replaces these...docs don't even claim that it does
 		.replace(/\\]|\\\)/g, function (match) {
@@ -251,8 +326,35 @@ var Markdown = function(raw, options) {
 		.replace(/\[code_(\w+)\]/g, function(full_match, which) {
 			return "<pre class=codesnippet>" + code_blocks['code_' + which] + "</pre>";
 		})
-		.replace(Markdown.potential_phone_regex, function mark_phone_numbers(match) {
-			return match !== '911' & match !== '999' && is_valid_pstn(match) ?
+		.replace(Markdown.potential_phone_regex, function mark_phone_numbers(
+			match,
+			offset,
+			full_str
+		) {
+			var in_anchor_tag;
+			var is_valid_number = match !== '911' & match !== '999' && is_valid_pstn(match);
+			var regexp_to_check;
+
+			if (!is_valid_number) {
+				return match;
+			}
+
+			regexp_to_check = [
+				anchor_tag_regexp,
+				tokenized_anchor_tag_regexp,
+				escaped_anchor_tag_regexp,
+				any_tag_regexp,
+				tokenized_any_tag_regexp,
+				escaped_any_tag_regexp
+			];
+			anchor_tag_location_cache = build_location_cache(
+				anchor_tag_location_cache,
+				full_str,
+				regexp_to_check
+			);
+			in_anchor_tag = is_in_location_cache(anchor_tag_location_cache, offset);
+
+			return !in_anchor_tag ?
 				"<a href='tel:" + match + "' class='markdown_phone_number'>" + match + '</a>' :
 				match;
 		})
