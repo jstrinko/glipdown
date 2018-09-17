@@ -332,7 +332,7 @@ var Markdown = function(raw, options) {
 			full_str
 		) {
 			var in_anchor_tag;
-			var is_valid_number = match !== '911' & match !== '999' && is_valid_pstn(match);
+			var is_valid_number = match !== '911' && match !== '999' && is_valid_pstn(match);
 			var regexp_to_check;
 
 			if (!is_valid_number) {
