@@ -103,7 +103,6 @@ var Markdown = function(raw, options) {
 		return false;
 	};
 	var team_join_link_regexp;
-	var from_origin_regexp;
 
 	if (!raw) {
 		return '';
@@ -129,7 +128,6 @@ var Markdown = function(raw, options) {
 
 	if (typeof window !== 'undefined' && window.location && window.location.origin) {
 		team_join_link_regexp = new RegExp('^' + window.location.origin + '/r/join/');
-		from_origin_regexp = new RegExp('^' + window.location.origin);
 	}
 
 	var val = raw.replace(/\&\#x2F;/g, '/') // not sure why underscore replaces these...docs don't even claim that it does
@@ -142,7 +140,6 @@ var Markdown = function(raw, options) {
 		.replace(/\[([^\]]*?)]\(([^)]*?)\)/g, function(full_match, text, link) {
 			var link_pieces;
 			var group_id;
-			var target;
 
 			text = String(text).replace(/%5D/g, ']');
 			link = String(link).replace(/'%29/g, ')');
@@ -152,15 +149,12 @@ var Markdown = function(raw, options) {
 			}
 
 			text = text.replace(/\\([\[\]()])/g, '$1');
-			target = !from_origin_regexp || !link.match(from_origin_regexp) ?
-				"target=_blank" :
-				'';
 			link_pieces = link.split('/');
 			group_id = link_pieces[link_pieces.length - 1];
 
 			return team_join_link_regexp && link.match(team_join_link_regexp) && link.indexOf('join') !== 0 ?
 				"<div onclick='Router.join_from_url(" + group_id + ", true)' class='team_join_link'>" + link + "</div>" :
-				"<a href='" + link + "' " + target + " rel='noreferrer'>" + text + "</a>";
+				"<a href='" + link + "' target='_blank' rel='noreferrer'>" + text + "</a>";
 		})
 		.replace(/%5D|%29/g, function (match) { //for the rare cases of escaped brackets happening outside of links
 			return {
@@ -208,7 +202,6 @@ var Markdown = function(raw, options) {
 		) {
 			var link_pieces;
 			var group_id;
-			var target;
 			var link_token = '{{--LINK-' + link_array.length + '--}}';
 			var include_space = full_match.match(/ $/);
 
@@ -238,9 +231,6 @@ var Markdown = function(raw, options) {
 				}
 			}
 			//console.warn("nomatch:", +new Date() - sub_bench);
-			target = !from_origin_regexp || !link.match(from_origin_regexp) ?
-				" target=_blank" :
-				'';
 
 			if (team_join_link_regexp && link.match(team_join_link_regexp) && link.indexOf('join') !== 0) {
 				link_pieces = link.split('/');
@@ -263,7 +253,7 @@ var Markdown = function(raw, options) {
 				(
 					maybe_email2 && !protocol ? 'mailto:' + maybe_email2 :
 					(protocol ? '' : 'http://')
-				) + link + "'" + target + " rel='noreferrer'>" +
+				) + link + "' target='_blank' rel='noreferrer'>" +
 				(maybe_email2 ? maybe_email2 : '') +
 				link + "</a>");
 
