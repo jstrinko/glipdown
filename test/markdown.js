@@ -149,7 +149,7 @@ var tests = [
 		escaped_len: 9602
 	},
 	{
-		str: fs.readFileSync('etc/largeslowmarkdown.txt', 'utf8'),
+		str: fs.readFileSync('../etc/largeslowmarkdown.txt', 'utf8'),
 		len: 440100,
 		escaped_len: 566128
 	},
@@ -204,6 +204,73 @@ var tests = [
 		escaped_len: 145
 	}
 ];
+var phone_tests = [
+	{
+		str: '88-52',
+		expected_res: false
+	},
+	{
+		str: '6-11,13-15,5-11',
+		expected_res: false
+	},
+	{
+		str: '2019-12-05 17:13:56',
+		expected_res: false
+	},
+	{
+		str: '+01 45-4444-4444',
+		expected_res: true
+	},
+	{
+		str: '2015-10-18 05:25:31 SCORE: 10-18, 14-13, 2-7',
+		expected_res: false
+	}
+];
+var score_tests = [
+	{
+		str: '88-52',
+		expected_res: true
+	},
+	{
+		str: '6-11,13-15,5-11',
+		expected_res: true
+	},
+	{
+		str: '2019-12-05 17:13:56',
+		expected_res: false
+	},
+	{
+		str: '+01 45-4444-4444',
+		expected_res: false
+	},
+	{
+		str: '2015-10-18 05:25:31 SCORE: 10-18, 14-13, 2-7',
+		expected_res: true
+	}
+];
+var timestamp_tests = [
+	{
+		str: '88-52',
+		expected_res: false
+	},
+	{
+		str: '6-11,13-15,5-11',
+		expected_res: false
+	},
+	{
+		str: '2019-12-05 17:13:56',
+		expected_res: true
+	},
+	{
+		str: '+01 45-4444-4444',
+		expected_res: false
+	},
+	{
+		str: '2015-10-18 05:25:31 SCORE: 10-18, 14-13, 2-7',
+		expected_res: true
+	}
+
+];
 
 // tests = [tests[tests.length - 1]];
 
@@ -238,4 +305,61 @@ _.each(tests, function(test) {
 			console.warn("FAILED - " + marked.length + " bytes " + taken + "ms");
 		}
 	});
+});
+var phone_regex = Markdown.potential_phone_regex;
+var timestamp_regex = Markdown.timestamp_regex;
+var score_regex = Markdown.score_regex;
+_.each(phone_tests, function(test){
+	var str = test.str;
+	var start = +new Date();
+	var temp = phone_regex.test(str);
+	var taken = +new Date() - start;
+	if(temp === test.expected_res) {
+		console.warn("Passed - " + str + " is " + test.expected_res + " for phone regex " + taken + "ms");
+	}
+	else {
+		console.warn("############################################");
+		console.warn(str);
+		console.warn("--------------------------------------------");
+		console.warn('RESULT: ' + temp + ' vs '+ 'EXPECTED: ' + test.expected_res);
+		//console.warn(`typeof temp: ${typeof temp}, temp: ${temp}`);
+		//console.warn(`typeof test.expected_res: ${typeof test.expected_res}, test.expected_res: ${test.expected_res}`);
+		console.warn("FAILED " + str + " for phone regex");
+	}
+});
+_.each(score_tests, function(test){
+	var str = test.str;
+	var start = +new Date();
+	var temp = score_regex.test(str);
+	var taken = +new Date() - start;
+	if(temp === test.expected_res) {
+		console.warn("Passed - " + str + " is " + test.expected_res + " for score regex " + taken + "ms");
+	}
+	else {
+		console.warn("############################################");
+		console.warn(str);
+		console.warn("--------------------------------------------");
+		console.warn('RESULT: ' + temp + ' vs '+ 'EXPECTED: ' + test.expected_res);
+		//console.warn(`typeof temp: ${typeof temp}, temp: ${temp}`);
+		//console.warn(`typeof test.expected_res: ${typeof test.expected_res}, test.expected_res: ${test.expected_res}`);
+		console.warn("FAILED " + str + " for score regex");
+	}
+});
+_.each(timestamp_tests, function(test){
+	var str = test.str;
+	var start = +new Date();
+	var temp = timestamp_regex.test(str);
+	var taken = +new Date() - start;
+	if(temp === test.expected_res) {
+		console.warn("Passed - " + str + " is " + test.expected_res + " for timestamp regex " + taken + "ms");
+	}
+	else {
+		console.warn("############################################");
+		console.warn(str);
+		console.warn("--------------------------------------------");
+		console.warn('RESULT: ' + temp + ' vs '+ 'EXPECTED: ' + test.expected_res);
+		//console.warn(`typeof temp: ${typeof temp}, temp: ${temp}`);
+		//console.warn(`typeof test.expected_res: ${typeof test.expected_res}, test.expected_res: ${test.expected_res}`);
+		console.warn("FAILED " + str + " for timestamp regex");
+	}
 });
