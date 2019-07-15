@@ -1,7 +1,7 @@
 {
 	"name": "glipdown",
 	"description": "Glip-flavored markdown",
-	"version": "0.0.54",
+	"version": "0.0.55",
 	"homepage": "https://github.com/jstrinko/glipdown",
 	"author": {
 		"name": "Jeff Strinko",

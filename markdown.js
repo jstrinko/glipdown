@@ -124,6 +124,8 @@ var Markdown = function(raw, options) {
 	var link_last_offset = 0;
 	var link_was_inside_tag = 0;
 	var link_array = [];
+	var score_array= [];
+	var timestamp_array = [];
 	var anchor_tag_location_cache;
 
 	if (typeof window !== 'undefined' && window.location && window.location.origin) {
@@ -317,6 +319,22 @@ var Markdown = function(raw, options) {
 		.replace(/\[code_(\w+)\]/g, function(full_match, which) {
 			return "<pre class=codesnippet>" + code_blocks['code_' + which] + "</pre>";
 		})
+		.replace(Markdown.timestamp_regex, function skip_timestamps(
+			match,
+			offset,
+			full_str) {
+			var time_token = '{{--TIME-' + timestamp_array.length + '--}}';
+			timestamp_array.push(match);
+			return time_token;
+		})
+		.replace(Markdown.score_regex, function skip_score(
+				match, 
+				offset,
+				full_str) {
+			var score_token = '{{--SCORE-' + score_array.length + '--}}';
+			score_array.push(match);
+			return score_token;
+		})
 		.replace(Markdown.potential_phone_regex, function mark_phone_numbers(
 			match,
 			offset,
@@ -354,7 +372,14 @@ var Markdown = function(raw, options) {
 		})
 		.replace(/mailto:<a href=/g, function (full_match, which) {
 			return "<a href=";
+		})
+		.replace(/{{--TIME-(\d*)--}}/g, function(time_token, time_index) {
+			return timestamp_array[time_index] || time_token;
+		})
+		.replace(/{{--SCORE-(\d*)--}}/g, function(score_token, score_index) {
+			return score_array[score_index] || score_token;
 		});
+		
 
 	return val;
 };
@@ -366,6 +391,8 @@ var Markdown_Is_Valid_Link = function (link) {
 Markdown.tld_url_regex = validLinkMarkDownRegEx;
 Markdown.url_regex = /^((ftp|https?):\/\/)?[-\w]+\.([-\w]+\.)*(\d+\.\d+\.\d+|[-A-Za-z]+)(:\d+)?($|(\/\S?(\/\S)*\/?)|(\#\S?)|(\?\S?))/i;
 Markdown.global_url_regex = /(([a-zA-Z0-9\!\#\$\%\&\'\*\+\-\/\=\?\%\_\`\{\|\}\~\.]+@)?)(((ftp|https?):\/\/)?[-\w]+\.([-\w]+\.)*(\d+\.\d+\.\d+|[-A-Za-z]+)(:\d+)?(((\/([A-Za-z0-9-\._~:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=])*)+)\??([A-Za-z0-9-\._~:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=\%])*)?)([^A-Za-z]|$)/gi;
+Markdown.score_regex = /(?:(\s|\n|^|,))\d{1,2}-(\d{1,2}(?!\d|-))/g;
+Markdown.timestamp_regex = /\d\d\d\d(?:[-, ])[01]\d(?:[-, ])[0-3]\d [0-2]\d:\d\d:[0-5]\d/g;
 Markdown.potential_phone_regex = /\+?(?:\d{1,4} ?)?(?:(?:\(\d{1,4}\)|\d(?:(?: |\-)?\d){0,3})(?:(?: |\-)?\d){2,}|(?:\(\d{2,4}\)|\d(?:(?: |\-)?\d){1,3})(?:(?: |\-)?\d){1,})(?:(?: x| ext.?)\d{1,5}){0,1}/g;
 
 var Markdown_For_Search = function (raw, options) {
