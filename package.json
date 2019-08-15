@@ -30,11 +30,9 @@
 		"node": ">= 0.8.0"
 	},
 	"scripts": {
-		"test": "mocha"
+		"test": "node test/markdown.js"
 	},
 	"dependencies": {
-		"chai": "^4.2.0",
-		"mocha": "^6.2.0",
 		"underscore": "1.5.x"
 	},
 	"keywords": [
