@@ -149,7 +149,7 @@ var tests = [
 		escaped_len: 9602
 	},
 	{
-		str: fs.readFileSync('../etc/largeslowmarkdown.txt', 'utf8'),
+		str: fs.readFileSync('etc/largeslowmarkdown.txt', 'utf8'),
 		len: 440100,
 		escaped_len: 566128
 	},
@@ -363,3 +363,60 @@ _.each(timestamp_tests, function(test){
 		console.warn("FAILED " + str + " for timestamp regex");
 	}
 });
+
+(function () {
+
+	/////////////////////////
+	// Helpers and globals //
+	/////////////////////////
+	var expect = require('chai').expect
+	////////////////
+	// Test suite //
+	////////////////
+
+
+	// With mocha we want to describe the module/component/behavior we are testing
+	// with a describe block - describe('Component', function() { })
+	describe('Markdown Phone Number Detection', function () {
+		before(function(done) {
+			global.Client = { 
+				get_controller: function(controller) {
+					return {
+						is_valid_pstn: function(match) {
+							return true;
+						}
+					}
+				}
+			}
+			done();
+		});
+		it("should parse a number", function () {
+			var number = '3053181328';
+			expect(Markdown(number)).to.equal('<a href=\'tel:3053181328\' class=\'markdown_phone_number\'>3053181328</a>');
+		});
+		it("should not parse a timestamp with valid area code", function () {
+			var number = '2019-07-01 17:27:59';
+			expect(Markdown(number)).to.equal('2019-07-01 17:27:59');
+		});
+		it("should not parse a timestamp without valid area code", function () {
+			var number = '1991-11-13 12:00:00';
+			expect(Markdown(number)).to.equal('1991-11-13 12:00:00');
+		});
+		it("should return a marked phone number", function () {
+			var text = 'this is a phone number 1-800-333-3333';
+			expect(Markdown(text)).to.equal('this is a phone number <a href=\'tel:1-800-333-3333\' class=\'markdown_phone_number\'>1-800-333-3333</a>');
+		});
+		it("Scores with valid country code are not marked as number", function(){
+			var text = '5-11';
+			expect(Markdown(text)).to.equal('5-11');
+		});
+		it("Timestamp and phone numbers should only mark phone number", function() {
+			var text = '2019-12-05 17:13:56 2019-07-01 17:27:59 3054944424';
+			expect(Markdown(text)).to.equal('2019-12-05 17:13:56 2019-07-01 17:27:59 <a href=\'tel:3054944424\' class=\'markdown_phone_number\'>3054944424</a>')
+		});
+		it("Timestamp, score, and phone numbers should only mark phone number", function() {
+			var text = '2019-12-05 17:13:56 23-16 2019-07-01 17:27:59 3054944424';
+			expect(Markdown(text)).to.equal('2019-12-05 17:13:56 23-16 2019-07-01 17:27:59 <a href=\'tel:3054944424\' class=\'markdown_phone_number\'>3054944424</a>')
+		});
+	});
+}());
